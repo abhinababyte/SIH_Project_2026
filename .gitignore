@@ -1,0 +1,24 @@
+# Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Excluded Project Files (Secret Sauce & Scratch)
+Documentation/
+scratch/
+app.py
+04_Model_Interpretation_and_SHAP.ipynb
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*$py.class
