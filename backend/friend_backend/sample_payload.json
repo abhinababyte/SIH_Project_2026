@@ -1,0 +1,7 @@
+{
+  "location_id": 1,
+  "rainfall_mm": 112.5,
+  "soil_moisture_percent": 86.0,
+  "slope_stability_index": 0.28,
+  "timestamp": "2026-09-01T10:30:00+00:00"
+}

@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-safe: var(--safe);
+  --color-safe-foreground: var(--safe-foreground);
+  --color-watch: var(--watch);
+  --color-watch-foreground: var(--watch-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Enforce Tactical Dark Mode globally */
+  color-scheme: dark;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  
+  /* Iceberg Hackathon Glassmorphism Variables */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --neon-blue: #38bdf8;
+  --neon-green: #10b981;
+  
+  --card: oklch(0.205 0 0 / 0.5);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --radius: 0.75rem;
+
+  /* Flood severity tokens */
+  --safe: oklch(0.68 0.16 155);
+  --safe-foreground: oklch(0.99 0 0);
+  --watch: oklch(0.82 0.16 90);
+  --watch-foreground: oklch(0.25 0.05 90);
+  --warning: oklch(0.72 0.18 55);
+  --warning-foreground: oklch(0.99 0 0);
+  --danger: oklch(0.58 0.24 25);
+  --danger-foreground: oklch(0.99 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-slate-950 text-slate-50 antialiased overflow-x-hidden;
+  }
+}
+
+/* Glassmorphism Classes */
+@layer utilities {
+  .glass-panel {
+    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl;
+  }
+  .neon-text {
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  }
+
+  /* Linear / Modern Tokens */
+  .linear-chassis {
+    background: radial-gradient(ellipse at top, #0a0a0f 0%, #050506 50%, #020203 100%);
+    color: #EDEDEF;
+  }
+  .linear-card {
+    background: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(255,255,255,0.02), 0 2px 10px rgba(0,0,0,0.25);
+    transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .linear-card:hover {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(255,255,255,0.05), 0 4px 16px rgba(0,0,0,0.3), 0 0 20px rgba(94,106,210,0.05);
+    transform: translateY(-2px);
+  }
+  .linear-text-primary {
+    color: #EDEDEF;
+  }
+  .linear-text-muted {
+    color: #8A8F98;
+  }
+  .linear-accent {
+    color: #5E6AD2;
+  }
+  .linear-heading {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .linear-label {
+    font-family: var(--font-ibm-plex), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}
+
+/* Tactical Leaflet Map Theming */
+.leaflet-container {
+  background: #020617 !important; /* Slate 950 */
+  font-family: inherit;
+}
+/* Invert standard OSM tiles to look like a dark tactical map */
+.leaflet-container .leaflet-tile {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) sepia(0.5);
+}
+.leaflet-bar a,
+.leaflet-control-attribution {
+  color: var(--foreground) !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--neon-blue) !important;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+.map-tiles { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
+
