@@ -1,0 +1,18 @@
+[project]
+name = "hill-shield-backend"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "pydantic",
+    "scikit-learn",
+    "xgboost",
+    "pandas",
+    "joblib",
+    "websockets",
+    "passlib[bcrypt]",
+    "python-jose[cryptography]",
+    "bcrypt"
+]
