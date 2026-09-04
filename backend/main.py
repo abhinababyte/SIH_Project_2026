@@ -6,8 +6,9 @@ import joblib
 import pandas as pd
 import json
 
-from app import models, schemas, auth
-from app.database import engine, get_db
+from app.routes import auth
+from app.database import models, schemas
+from app.database.db import engine, get_db
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)

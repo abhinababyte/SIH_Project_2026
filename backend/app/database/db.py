@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./hillshield.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./app/database/hillshield.db"
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db" # Easy switch later
 
 engine = create_engine(
