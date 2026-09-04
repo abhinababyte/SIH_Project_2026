@@ -5,8 +5,8 @@ import joblib
 import pandas as pd
 import json
 
-from . import models, schemas, auth
-from .database import engine, get_db
+from app import models, schemas, auth
+from app.database import engine, get_db
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -25,7 +25,7 @@ app.add_middleware(
 model = None
 try:
     # Attempt to load the pre-trained model from the models directory
-    model = joblib.load('../models/xgboost_flood_model.pkl')
+    model = joblib.load('./app/models/xgboost_flood_model.pkl')
     print("ML Model loaded successfully.")
 except Exception as e:
     print(f"Warning: Could not load ML model: {e}")
