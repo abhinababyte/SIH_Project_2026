@@ -32,7 +32,7 @@ async def escalate_incident(incident: IncidentCreate, db: Session = Depends(get_
     return db_incident
 
 
-@router.post("/{incident_id}/acknowledge")
+@router.post("/{incident_id}/acknowledge", response_model=IncidentResponse)
 async def acknowledge_incident(incident_id: str, db: Session = Depends(get_db)):
     db_incident = incident_service.acknowledge_incident(db, incident_id)
     if not db_incident:
@@ -42,4 +42,30 @@ async def acknowledge_incident(incident_id: str, db: Session = Depends(get_db)):
         "event": "INCIDENT_ACKNOWLEDGED",
         "incident_id": incident_id,
     })
-    return {"status": "success", "incident_id": incident_id}
+    return db_incident
+
+
+@router.post("/{incident_id}/start-evacuation", response_model=IncidentResponse)
+async def start_evacuation(incident_id: str, db: Session = Depends(get_db)):
+    db_incident = incident_service.start_evacuation(db, incident_id)
+    if not db_incident:
+        raise HTTPException(status_code=404, detail="Incident not found")
+
+    await manager.broadcast({
+        "event": "INCIDENT_EVACUATION_STARTED",
+        "incident_id": incident_id,
+    })
+    return db_incident
+
+
+@router.post("/{incident_id}/complete", response_model=IncidentResponse)
+async def complete_incident(incident_id: str, db: Session = Depends(get_db)):
+    db_incident = incident_service.complete_incident(db, incident_id)
+    if not db_incident:
+        raise HTTPException(status_code=404, detail="Incident not found")
+
+    await manager.broadcast({
+        "event": "INCIDENT_COMPLETED",
+        "incident_id": incident_id,
+    })
+    return db_incident
