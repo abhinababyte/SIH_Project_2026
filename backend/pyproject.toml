@@ -1,4 +1,4 @@
-[project]
+[project    "shap"`n]
 name = "hill-shield-backend"
 version = "0.1.0"
 requires-python = ">=3.13"
@@ -12,7 +12,7 @@ dependencies = [
     "pandas",
     "joblib",
     "websockets",
-    "passlib[bcrypt]",
-    "python-jose[cryptography]",
-    "bcrypt"
-]
+    "passlib[bcrypt    "shap"`n]",
+    "python-jose[cryptography    "shap"`n]",
+    "bcrypt",
+    "shap"`n]

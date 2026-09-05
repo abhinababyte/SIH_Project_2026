@@ -160,6 +160,34 @@ function formatTime(iso: string): string {
 export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
   const [incidents, setIncidents] = useState<Record<ColumnKey, Incident[]>>(INITIAL_INCIDENTS);
   
+  // Fetch real incidents from backend
+  React.useEffect(() => {
+    const fetchIncidents = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/incidents");
+        const data = await response.json();
+        
+        // Group by status
+        const detected = data.filter((i: any) => i.status === "DETECTED");
+        const acknowledged = data.filter((i: any) => i.status === "ACKNOWLEDGED");
+        const evacuating = data.filter((i: any) => i.status === "EVACUATING");
+        
+        setIncidents(prev => ({
+          detected: detected.length > 0 ? detected : prev.detected,
+          acknowledged: acknowledged.length > 0 ? acknowledged : prev.acknowledged,
+          evacuating: prev.evacuating // keep dummy for now
+        }));
+      } catch (err) {
+        console.error("Failed to fetch incidents", err);
+      }
+    };
+    
+    fetchIncidents();
+    // Poll every 2 seconds
+    const interval = setInterval(fetchIncidents, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   const totalIncidents = Object.values(incidents).flat().length;
 
   const acknowledgeIncident = (incidentToMove: Incident) => {
@@ -167,6 +195,14 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
       ...prev,
       detected: prev.detected.filter(i => i.id !== incidentToMove.id),
       acknowledged: [incidentToMove, ...prev.acknowledged]
+    }));
+  };
+
+  const resolveIncident = (incidentToMove: Incident) => {
+    setIncidents(prev => ({
+      ...prev,
+      acknowledged: prev.acknowledged.filter(i => i.id !== incidentToMove.id),
+      evacuating: prev.evacuating.filter(i => i.id !== incidentToMove.id)
     }));
   };
 
@@ -270,19 +306,28 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
                           ACKNOWLEDGE & DISPATCH
                         </button>
                       ) : (
-                        <div className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-medium bg-[#5E6AD2]/10 text-[#5E6AD2] rounded-lg border border-[#5E6AD2]/20 tracking-wide mt-2">
-                          {col.key === "acknowledged" && (
-                            <>
-                              <Truck className="size-3" />
-                              Rescuers dispatched
-                            </>
-                          )}
-                          {col.key === "evacuating" && (
-                            <>
-                              <CheckCircle2 className="size-3" />
-                              Evacuation in progress
-                            </>
-                          )}
+                        <div className="flex flex-col gap-2 mt-2">
+                          <div className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-medium bg-[#5E6AD2]/10 text-[#5E6AD2] rounded-lg border border-[#5E6AD2]/20 tracking-wide">
+                            {col.key === "acknowledged" && (
+                              <>
+                                <Truck className="size-3" />
+                                Rescuers dispatched
+                              </>
+                            )}
+                            {col.key === "evacuating" && (
+                              <>
+                                <CheckCircle2 className="size-3" />
+                                Evacuation in progress
+                              </>
+                            )}
+                          </div>
+                          <button 
+                            onClick={() => resolveIncident(incident)}
+                            className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-bold bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-lg border border-emerald-500/30 tracking-wide transition-all shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                          >
+                            <CheckCircle2 className="size-3" />
+                            MARK AS RESOLVED
+                          </button>
                         </div>
                       )}
                     </div>
@@ -296,3 +341,4 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
     </div>
   );
 }
+

@@ -25,7 +25,7 @@ export default function ResidentLiveMap() {
   const [selectedSensor, setSelectedSensor] = useState<any>(null);
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const [userName, setUserName] = useState("Resident");
-  const { simulatedSensors, rain, soil, river, severity } = useSimulation();
+  const { simulatedSensors, rain, soil, river, severity, isLiveOsiris, toggleOsiris } = useSimulation();
 
   useEffect(() => {
     const storedName = localStorage.getItem("hillshield_user_name");
@@ -250,7 +250,12 @@ export default function ResidentLiveMap() {
       <style>{`.leaflet-control-zoom { display: none !important; }`}</style>
       <main className="flex-1 relative w-full h-full bg-slate-950 z-0">
         <div className="absolute inset-0 z-0">
-          <FloodMap sensors={simulatedSensors} onSensorClick={(s: any) => { setSelectedSensor(s); setIsRiskOpen(true); }} showUserLocation={true} />
+          <FloodMap 
+            sensors={simulatedSensors} 
+            blockedRoutes={[{ id: "1", lat: 30.7380, lng: 78.5950, title: "Fallen Tree on River Road" }]}
+            onSensorClick={(s: any) => { setSelectedSensor(s); setIsRiskOpen(true); }} 
+            showUserLocation={true} 
+          />
         </div>
 
         {/* Floating Risk Details Window */}
@@ -336,5 +341,6 @@ export default function ResidentLiveMap() {
     </div>
   );
 }
+
 
 
