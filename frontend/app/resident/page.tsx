@@ -7,6 +7,7 @@ import { ShieldAlert, Activity, Navigation, CloudRain, Droplets, Mountain, Phone
 import { SosDetails } from "@/components/sos-details";
 import CitizenSafetyChat from "@/components/CitizenSafetyChat";
 import { AlertsFeed } from "@/components/alerts-feed";
+import { CommunityReportsSection } from "@/components/CommunityReportsSection";
 import { useFloodWebsocket } from "@/hooks/use-flood-websocket";
 import { useSimulation } from "@/components/simulation-provider";
 
@@ -871,131 +872,7 @@ export default function ResidentDashboard() {
           <p className="text-slate-400 mt-2">Live reports from your neighbors. Ground-truth data is critical when sensors fail.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* Submit Report Form */}
-          <div className="bg-[#121923] border border-white/5 rounded-3xl p-6 lg:p-8 flex flex-col">
-            <h3 className="text-xl font-serif text-white mb-2">Report a Hazard</h3>
-            <p className="text-xs text-slate-400 mb-6">
-              Help your community navigate safely. Report blocked roads, landslides, or rising water immediately.
-            </p>
-
-            <form className="flex flex-col gap-4" onSubmit={(e) => { e.preventDefault(); alert("Hazard reported successfully."); }}>
-              <div>
-                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-2 block">Hazard Type</label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  <label className="cursor-pointer">
-                    <input type="radio" name="hazard" className="peer sr-only" defaultChecked />
-                    <div className="border border-white/10 bg-black/30 peer-checked:bg-rose-500/20 peer-checked:border-rose-500/50 peer-checked:text-rose-400 text-slate-400 rounded-lg p-2 flex flex-col items-center gap-1 text-[10px] font-bold uppercase transition-colors">
-                      <Mountain className="size-4" />
-                      Landslide
-                    </div>
-                  </label>
-                  <label className="cursor-pointer">
-                    <input type="radio" name="hazard" className="peer sr-only" />
-                    <div className="border border-white/10 bg-black/30 peer-checked:bg-blue-500/20 peer-checked:border-blue-500/50 peer-checked:text-blue-400 text-slate-400 rounded-lg p-2 flex flex-col items-center gap-1 text-[10px] font-bold uppercase transition-colors">
-                      <Droplets className="size-4" />
-                      Flood
-                    </div>
-                  </label>
-                  <label className="cursor-pointer">
-                    <input type="radio" name="hazard" className="peer sr-only" />
-                    <div className="border border-white/10 bg-black/30 peer-checked:bg-amber-500/20 peer-checked:border-amber-500/50 peer-checked:text-amber-400 text-slate-400 rounded-lg p-2 flex flex-col items-center gap-1 text-[10px] font-bold uppercase transition-colors">
-                      <AlertTriangle className="size-4" />
-                      Blocked Road
-                    </div>
-                  </label>
-                  <label className="cursor-pointer">
-                    <input type="radio" name="hazard" className="peer sr-only" />
-                    <div className="border border-white/10 bg-black/30 peer-checked:bg-white/10 peer-checked:border-white/30 peer-checked:text-white text-slate-400 rounded-lg p-2 flex flex-col items-center gap-1 text-[10px] font-bold uppercase transition-colors">
-                      <Activity className="size-4" />
-                      Other
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Description</label>
-                <textarea rows={3} placeholder="Provide details (e.g. Tree fell on main road near post office)..." className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-rose-500/50 resize-none"></textarea>
-              </div>
-
-              <div className="mt-2">
-                <button type="submit" className="w-full py-4 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
-                  <ShieldAlert className="size-4" />
-                  Broadcast Hazard Alert
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Recent Reports List */}
-          <div className="bg-[#0a0f18] border border-white/5 rounded-3xl p-6 lg:p-8">
-             <div className="flex items-center justify-between mb-6">
-               <h3 className="text-xl font-serif text-white">Recent Reports</h3>
-               <span className="flex items-center gap-2 text-xs text-emerald-400 font-mono">
-                 <span className="relative flex size-2">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
-                 </span>
-                 Live Updates
-               </span>
-             </div>
-
-             <div className="space-y-4">
-               
-               <div className="bg-[#121923] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                 <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
-                 <div className="flex justify-between items-start mb-2">
-                   <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
-                     <Mountain className="size-4" /> Landslide
-                   </div>
-                   <span className="text-[10px] font-mono text-slate-500">4 MINS AGO</span>
-                 </div>
-                 <p className="text-slate-300 text-sm mb-3">
-                   Massive soil shift near Millbrook slope. The lower road is completely impassable. 
-                 </p>
-                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                   <User className="size-3" /> Reported by Rahul S. (Verified Resident)
-                 </div>
-               </div>
-
-               <div className="bg-[#121923] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                 <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
-                 <div className="flex justify-between items-start mb-2">
-                   <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
-                     <AlertTriangle className="size-4" /> Blocked Route
-                   </div>
-                   <span className="text-[10px] font-mono text-slate-500">12 MINS AGO</span>
-                 </div>
-                 <p className="text-slate-300 text-sm mb-3">
-                   Fallen tree blocking the bridge at River Road. Only foot traffic is possible.
-                 </p>
-                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                   <User className="size-3" /> Reported by Anil K. (Verified Resident)
-                 </div>
-               </div>
-
-               <div className="bg-[#121923] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                 <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-                 <div className="flex justify-between items-start mb-2">
-                   <div className="flex items-center gap-2 text-blue-400 font-bold text-sm">
-                     <Droplets className="size-4" /> Rising Water
-                   </div>
-                   <span className="text-[10px] font-mono text-slate-500">22 MINS AGO</span>
-                 </div>
-                 <p className="text-slate-300 text-sm mb-3">
-                   Water level at the old well has reached the red mark. Surrounding fields are flooding.
-                 </p>
-                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                   <User className="size-3" /> Reported by Meena D. (Verified Resident)
-                 </div>
-               </div>
-
-             </div>
-          </div>
-
-        </div>
+        <CommunityReportsSection userName={userName} />
       </section>
 
       {/* Persistent Ask AI Floating Button */}
