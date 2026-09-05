@@ -50,6 +50,7 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const fetchReports = async () => {
     try {
@@ -57,8 +58,10 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
       if (!res.ok) throw new Error("Failed to load reports");
       const data = await res.json();
       setReports(data);
+      setLoadError(null);
     } catch (err) {
       console.error("Failed to fetch reports", err);
+      setLoadError("Could not reach the reports server. Is the backend running?");
     } finally {
       setIsLoading(false);
     }
@@ -185,6 +188,8 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
         <div className="space-y-4 max-h-[520px] overflow-y-auto no-scrollbar">
           {isLoading ? (
             <p className="text-sm text-slate-500 text-center py-8">Loading reports...</p>
+          ) : loadError ? (
+            <p className="text-sm text-rose-400 text-center py-8">{loadError}</p>
           ) : reports.length === 0 ? (
             <p className="text-sm text-slate-500 text-center py-8">No reports yet. Be the first to report a hazard.</p>
           ) : (
