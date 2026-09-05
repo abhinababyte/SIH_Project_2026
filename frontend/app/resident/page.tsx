@@ -22,7 +22,42 @@ export default function ResidentDashboard() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
   const [userName, setUserName] = useState("Resident");
-  const { simulatedSensors, rain, soil, river, severity } = useSimulation();
+  const { simulatedSensors, rain: globalRain, soil: globalSoil, river, severity } = useSimulation();
+  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [localRain, setLocalRain] = useState<number | null>(null);
+  const [localSoil, setLocalSoil] = useState<number | null>(null);
+  const [locationName, setLocationName] = useState<string | null>(null);
+  const [blockedRoutes, setBlockedRoutes] = useState<{id: string, lat: number, lng: number, title: string}[]>([{ id: '1', lat: 30.7380, lng: 78.5950, title: 'Fallen Tree on River Road' }]);
+
+  const handleShareLocation = () => {
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      setUserLocation({lat, lng});
+      
+      try {
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=precipitation,soil_moisture_0_to_7cm`);
+        const data = await res.json();
+        setLocalRain(data.current.precipitation || 0);
+        setLocalSoil(Math.min(100, (data.current.soil_moisture_0_to_7cm || 0.2) * 200));
+        
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        const geoData = await geoRes.json();
+        setLocationName(geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.county || "Your Location");
+      } catch (e) {
+        console.error(e);
+      }
+      setIsLocating(false);
+    }, () => {
+      setIsLocating(false);
+      alert("Location access denied. Using regional data.");
+    });
+  };
+
+  const rain = localRain !== null ? localRain : globalRain;
+  const soil = localSoil !== null ? localSoil : globalSoil;
 
   useEffect(() => {
     const storedName = localStorage.getItem("hillshield_user_name");
@@ -124,9 +159,9 @@ export default function ResidentDashboard() {
       {/* TOP HEADER BAR */}
       <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between pr-6 pointer-events-auto">
         <div className="flex items-center h-full">
-          <div className="h-16 w-[72px] shrink-0 flex items-center justify-center border-r border-white/5 overflow-hidden">
-            <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-full object-cover object-center" />
-          </div>
+          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-4">
+              <img src="/HillShield.png" alt="HillShield Logo" className="h-12 w-auto object-contain" />
+            </div>
           
           <div className="pl-6 flex items-center gap-6">
             <div>
@@ -343,67 +378,124 @@ export default function ResidentDashboard() {
           
           {/* Header & Level */}
           <div className="flex items-start justify-between">
-            <div>
-              <span className="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-3 border border-amber-500/30">
-                Level 2 Watch
-              </span>
-              <h2 className="text-2xl font-serif text-white mb-1">Be Prepared</h2>
-              <p className="text-xs text-slate-400 leading-relaxed">Rivers are swelling. Keep emergency kits ready.</p>
+            <div className="w-full">
+              {userLocation ? (
+                <>
+                  <span className={`inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-full mb-3 border ${compositeSev === 'danger' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : compositeSev === 'watch' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'}`}>
+                    {compositeSev === 'danger' ? 'CRITICAL DANGER' : compositeSev === 'watch' ? 'ELEVATED RISK' : 'SAFE ZONE'}
+                  </span>
+                  <h2 className="text-2xl font-serif text-white mb-1">
+                    {compositeSev === 'danger' ? 'Evacuate Immediately' : compositeSev === 'watch' ? 'Be Prepared' : 'Conditions Stable'}
+                  </h2>
+                  <p className="text-xs text-slate-400 leading-relaxed mt-1 mb-3">
+                    <MapPin className="size-3 inline-block mr-1 text-[#5E6AD2]" />
+                    Localized for: <strong className="text-white">{locationName || "Your exact coordinates"}</strong>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <span className="inline-block px-3 py-1 bg-slate-500/20 text-slate-400 text-xs font-bold tracking-widest uppercase rounded-full mb-3 border border-slate-500/30">
+                    Regional Alert
+                  </span>
+                  <h2 className="text-2xl font-serif text-white mb-1">Warning System Active</h2>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">Showing generalized regional data.</p>
+                  
+                  <button 
+                    onClick={handleShareLocation}
+                    disabled={isLocating}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-[#5E6AD2]/10 hover:bg-[#5E6AD2]/20 border border-[#5E6AD2]/30 text-[#5E6AD2] rounded-full text-xs font-bold tracking-widest uppercase transition-all shadow-[0_0_15px_rgba(94,106,210,0.15)]"
+                  >
+                    {isLocating ? (
+                      <div className="size-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                    ) : (
+                      <MapPin className="size-4" />
+                    )}
+                    Use Precise Location
+                  </button>
+                </>
+              )}
             </div>
+            
             <button className="p-2.5 bg-amber-500/10 text-amber-500 rounded-full hover:bg-amber-500/20 transition-colors shrink-0">
               <BellRing className="size-4" />
             </button>
           </div>
 
-          {/* Predictive Safe Window (Kimi's Micro-Task Engine) */}
-          <div className="bg-black/30 rounded-2xl border border-white/5 p-4 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
-              <div className="h-full bg-rose-500 w-[60%] animate-pulse"></div>
-            </div>
-            
-            <div className="flex items-end justify-between mb-3">
-              <div>
-                <div className="text-[10px] text-slate-400 font-mono uppercase tracking-widest mb-1">Impact Window</div>
-                <div className="text-3xl font-black text-rose-400">18<span className="text-sm text-rose-400/70 ml-1 font-sans">mins left</span></div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] text-slate-400 font-mono uppercase tracking-widest mb-1">Action</div>
-                <div className="text-sm font-bold text-white uppercase tracking-wider animate-pulse">Evacuate Now</div>
-              </div>
-            </div>
+          {/* Predictive Safe Window & Evidence */}
+          {userLocation ? (
+            <>
+              {/* Predictive Safe Window */}
+              <div className="bg-black/30 rounded-2xl border border-white/5 p-4 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
+                  <div className={`h-full ${compositeSev === 'danger' ? 'bg-rose-500 w-[80%]' : compositeSev === 'watch' ? 'bg-amber-500 w-[50%]' : 'bg-emerald-500 w-[10%]'} animate-pulse`}></div>
+                </div>
+                
+                <div className="flex items-end justify-between mb-3 mt-1">
+                  <div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase tracking-widest mb-1">Impact Window</div>
+                    {compositeSev === 'danger' ? (
+                        <div className="text-3xl font-black text-rose-400">12<span className="text-sm text-rose-400/70 ml-1 font-sans">mins left</span></div>
+                    ) : compositeSev === 'watch' ? (
+                        <div className="text-3xl font-black text-amber-400">45<span className="text-sm text-amber-400/70 ml-1 font-sans">mins left</span></div>
+                    ) : (
+                        <div className="text-3xl font-black text-emerald-400">Stable</div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] text-slate-400 font-mono uppercase tracking-widest mb-1">Action</div>
+                    {compositeSev === 'danger' ? (
+                        <div className="text-sm font-bold text-rose-400 uppercase tracking-wider animate-pulse">Evacuate Now</div>
+                    ) : compositeSev === 'watch' ? (
+                        <div className="text-sm font-bold text-amber-400 uppercase tracking-wider animate-pulse">Prepare Kits</div>
+                    ) : (
+                        <div className="text-sm font-bold text-emerald-400 uppercase tracking-wider">Stay Inside</div>
+                    )}
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5">
-                <span className="text-xs text-slate-300 flex items-center gap-2"><div className="size-1.5 rounded-full bg-amber-500"></div> Secure Documents</span>
-                <span className="text-[10px] font-mono text-slate-400">~2 min ⏳</span>
+                <div className="space-y-2 mt-4">
+                  {compositeSev !== 'safe' ? (
+                      <>
+                      <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5">
+                        <span className="text-xs text-slate-300 flex items-center gap-2"><div className="size-1.5 rounded-full bg-amber-500"></div> Secure Documents</span>
+                        <span className="text-[10px] font-mono text-slate-400">~2 min ⏳</span>
+                      </div>
+                      <div className="flex items-center justify-between bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
+                        <span className="text-xs text-emerald-400 font-bold flex items-center gap-2"><div className="size-1.5 rounded-full bg-emerald-500 animate-ping"></div> Walk to Shelter</span>
+                        <span className="text-[10px] font-mono text-emerald-400 font-bold">~6 min 🏃</span>
+                      </div>
+                      </>
+                  ) : (
+                      <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5">
+                        <span className="text-xs text-slate-300 flex items-center gap-2"><div className="size-1.5 rounded-full bg-emerald-500"></div> All Clear</span>
+                        <span className="text-[10px] font-mono text-slate-400">Local Area Safe</span>
+                      </div>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5">
-                <span className="text-xs text-slate-300 flex items-center gap-2"><div className="size-1.5 rounded-full bg-amber-500"></div> Move Livestock</span>
-                <span className="text-[10px] font-mono text-slate-400">~10 min ⏳</span>
-              </div>
-              <div className="flex items-center justify-between bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
-                <span className="text-xs text-emerald-400 font-bold flex items-center gap-2"><div className="size-1.5 rounded-full bg-emerald-500 animate-ping"></div> Walk to Shelter</span>
-                <span className="text-[10px] font-mono text-emerald-400 font-bold">~6 min 🏃</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Alert Evidence Layer (Why this alert?) */}
-          <div className="bg-black/20 rounded-xl p-3 border border-white/5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-slate-300">Why this alert?</span>
-              <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                <ShieldAlert className="size-3" />
-                94% Confidence
-              </span>
+              {/* Alert Evidence Layer */}
+              <div className="bg-black/20 rounded-xl p-3 border border-white/5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-slate-300">Why this alert?</span>
+                  <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                    <ShieldAlert className="size-3" />
+                    Local Telemetry
+                  </span>
+                </div>
+                <ul className="space-y-1.5">
+                  <li className="text-[11px] text-slate-400 flex items-center gap-2"><CloudRain className="size-3 text-[#5E6AD2]"/> {Math.round(rain)}mm rainfall detected locally</li>
+                  <li className="text-[11px] text-slate-400 flex items-center gap-2"><Droplets className="size-3 text-emerald-400"/> Local soil saturation at {Math.round(soil)}%</li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <div className="bg-black/20 rounded-xl p-6 border border-white/5 flex flex-col items-center justify-center text-center mt-2">
+                <ShieldAlert className="size-8 text-slate-600 mb-3" />
+                <p className="text-sm text-slate-300 font-medium">Location Required</p>
+                <p className="text-xs text-slate-500 mt-1 max-w-[280px]">To see precise evacuation windows and hyper-local sensor data, please share your location.</p>
             </div>
-            <ul className="space-y-1.5">
-              <li className="text-[11px] text-slate-400 flex items-center gap-2"><CloudRain className="size-3 text-blue-400"/> 216mm rain in 6 hrs (upstream)</li>
-              <li className="text-[11px] text-slate-400 flex items-center gap-2"><Droplets className="size-3 text-amber-400"/> Soil saturation at critical 91%</li>
-              <li className="text-[11px] text-slate-400 flex items-center gap-2"><Mountain className="size-3 text-rose-400"/> 2 verified landslide reports</li>
-            </ul>
-          </div>
-
+          )}
         </div>
       </section>
 
@@ -456,7 +548,7 @@ export default function ResidentDashboard() {
                 <CloudRain className={`size-4 ${getTextColor(rainSev)} opacity-60`} />
               </div>
               <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(rainSev)}`}>{rain} <span className="text-sm font-sans opacity-70">mm/hr</span></div>
+                <div className={`text-4xl font-serif ${getTextColor(rainSev)}`}>{Number(rain).toFixed(2)} <span className="text-sm font-sans opacity-70">mm/hr</span></div>
                 <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(rainSev)} opacity-70`}>
                   {rainSev === "danger" ? "Extreme downpour. Ground absorption halted. Immediate flash flood risk." : rainSev === "watch" ? "Steady downpour. Ground absorption is slowing down. Expected to continue." : "Light rain. Natural drainage systems are functioning normally."}
                 </p>
@@ -469,7 +561,7 @@ export default function ResidentDashboard() {
                 <Droplets className={`size-4 ${getTextColor(soilSev)} opacity-60`} />
               </div>
               <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(soilSev)}`}>{soil}<span className="text-xl font-sans ml-1 opacity-70">%</span></div>
+                <div className={`text-4xl font-serif ${getTextColor(soilSev)}`}>{Number(soil).toFixed(2)}<span className="text-xl font-sans ml-1 opacity-70">%</span></div>
                 <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(soilSev)} opacity-70`}>
                   {soilSev === "danger" ? "Critical saturation. Mudslides likely in steep areas. Avoid slopes." : soilSev === "watch" ? "Ground is heavily saturated. Approaching critical threshold for potential landslides." : "Optimal soil absorption levels. No immediate landslide threat."}
                 </p>
@@ -526,7 +618,7 @@ export default function ResidentDashboard() {
             {/* Real Map UI disabled for the glimpse */}
             <div className="absolute inset-2 rounded-2xl bg-[#0a0f18] overflow-hidden pointer-events-none z-10">
               <div className="absolute inset-0 z-0">
-                <FloodMap sensors={simulatedSensors} onSensorClick={() => {}} />
+                <FloodMap sensors={simulatedSensors} onSensorClick={() => {}} showUserLocation={true} blockedRoutes={blockedRoutes} />
               </div>
             </div>
           </Link>
@@ -939,4 +1031,6 @@ export default function ResidentDashboard() {
     </div>
   );
 }
+
+
 

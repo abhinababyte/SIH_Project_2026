@@ -90,9 +90,9 @@ export default function LoginPage() {
       <header className="sticky top-0 z-50 h-16 bg-slate-950/80 backdrop-blur-md border-b border-white/5 flex flex-col justify-center">
         <div className="px-6 flex items-center justify-between w-full h-full">
           <div className="flex items-center h-full">
-            <div className="h-10 w-[45px] shrink-0 flex items-center justify-center overflow-hidden">
-              <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-full object-cover object-center" />
-            </div>
+            <div className="h-12 w-auto shrink-0 flex items-center justify-center">
+                <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-auto object-contain" />
+              </div>
             <div className="pl-4">
               <h1 className="text-sm font-bold text-white tracking-wide">HillShield</h1>
               <p className="text-[10px] text-slate-400 font-mono tracking-wider uppercase hidden sm:block">Natural Disaster Detection Intelligence</p>
@@ -299,3 +299,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

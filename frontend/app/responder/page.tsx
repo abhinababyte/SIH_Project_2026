@@ -7,10 +7,11 @@ import { RiskDashboard } from "@/components/risk-dashboard"
 import { AlertsFeed } from "@/components/alerts-feed"
 import SheltersPanel from "@/components/SheltersPanel"
 import ReportPanel from "@/components/ReportPanel"
+import { WhatIfSimulator } from "@/components/WhatIfSimulator"
 import IncidentPanel from "@/components/IncidentPanel"
 import CitizenSafetyChat from "@/components/CitizenSafetyChat"
 import { AppSidebar } from "@/components/AppSidebar"
-import { Activity, Radio, AlertTriangle, MapPin, Bell, ShieldAlert, Phone, User, LogOut, Settings, Trash2 } from "lucide-react"
+import { Activity, Radio, AlertTriangle, CloudRain, MapPin, Bell, ShieldAlert, Phone, User, LogOut, Settings, Trash2 } from "lucide-react"
 import { RiskDetails } from "@/components/risk-details"
 import { SosDetails } from "@/components/sos-details"
 import { useFloodWebsocket } from "@/hooks/use-flood-websocket"
@@ -28,7 +29,7 @@ export default function TacticalCommandCenter() {
   const [isAccountOpen, setIsAccountOpen] = useState(false)
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const [isSosOpen, setIsSosOpen] = useState(false);
-  const [activePanel, setActivePanel] = useState<"chat" | "shelters" | "incident" | "report" | null>(null);
+  const [activePanel, setActivePanel] = useState<"chat" | "shelters" | "incident" | "report" | "whatif" | null>(null);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [selectedSensor, setSelectedSensor] = useState<Sensor | null>(null);
   const [userName, setUserName] = useState("Responder Node 01");
@@ -90,7 +91,7 @@ export default function TacticalCommandCenter() {
       clearTimeout(t4);
     }
   }, []);
-  const { simulatedSensors, rain, setRain, soil, setSoil, river, setRiver } = useSimulation()
+  const { simulatedSensors, rain, setRain, soil, setSoil, river, setRiver, isLiveOsiris, toggleOsiris } = useSimulation()
   const { isConnected } = useFloodWebsocket()
   
   const severity = overallSeverity(simulatedSensors)
@@ -101,7 +102,12 @@ export default function TacticalCommandCenter() {
       
       {/* BASE LAYER: FULLSCREEN TACTICAL MAP */}
       <div className="absolute inset-0 z-0">
-        <FloodMap sensors={simulatedSensors} onSensorClick={(s) => { setSelectedSensor(s); setIsRiskOpen(true); }} showUserLocation={true} />
+        <FloodMap 
+          sensors={simulatedSensors} 
+          blockedRoutes={[{ id: "1", lat: 30.7380, lng: 78.5950, title: "Fallen Tree on River Road" }]}
+          onSensorClick={(s) => { setSelectedSensor(s); setIsRiskOpen(true); }} 
+          showUserLocation={true} 
+        />
       </div>
       
       {/* VIGNETTE OVERLAY */}
@@ -156,14 +162,24 @@ export default function TacticalCommandCenter() {
         <ReportPanel isOpen={activePanel === "report"} onClose={() => setActivePanel(null)} />
       </div>
       
+      <div 
+        className={cn(
+          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          activePanel === "whatif" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
+        )}
+        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
+      >
+        <WhatIfSimulator />
+      </div>
+      
       {/* TOP HEADER BAR */}
       <header 
         className="absolute top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between pr-6 pointer-events-auto"
       >
         <div className="flex items-center h-full">
-          <div className="h-16 w-[72px] shrink-0 flex items-center justify-center border-r border-white/5 overflow-hidden">
-            <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-full object-cover object-center" />
-          </div>
+          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-4">
+              <img src="/HillShield.png" alt="HillShield Logo" className="h-12 w-auto object-contain" />
+            </div>
           
           <div className="pl-6 flex items-center gap-6">
             <div>
@@ -173,7 +189,17 @@ export default function TacticalCommandCenter() {
         </div>
 
         <div className="flex items-center gap-5">
-           {/* SOS Button */}
+             <button
+               onClick={toggleOsiris}
+               className={cn("px-3 py-1.5 rounded-full transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 border focus:outline-none",
+                 isLiveOsiris ? "bg-indigo-600/90 hover:bg-indigo-500 border-indigo-400 shadow-[0_0_12px_rgba(79,70,229,0.6)]" : "bg-slate-800 hover:bg-slate-700 border-slate-600"
+               )}
+             >
+               <CloudRain className="size-3" />
+               {isLiveOsiris ? "OSIRIS: LIVE" : "OSIRIS: OFF"}
+             </button>
+
+             {/* SOS Button */}
            <button 
              onClick={() => setIsSosOpen(!isSosOpen)}
              className="px-3 py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none"
@@ -344,3 +370,11 @@ export default function TacticalCommandCenter() {
     </main>
   )
 }
+
+
+
+
+
+
+
+

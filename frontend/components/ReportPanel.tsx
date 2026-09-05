@@ -192,3 +192,4 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
     </div>
   );
 }
+

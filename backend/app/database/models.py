@@ -23,3 +23,14 @@ class TelemetryLog(Base):
     river_water_level_m = Column(Float)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     prediction_risk_score = Column(Float, nullable=True) # ML Output
+
+class Incident(Base):
+    __tablename__ = "incidents"
+
+    id = Column(String, primary_key=True, index=True)
+    title = Column(String)
+    location = Column(String)
+    priority = Column(String) # low, medium, high, critical
+    status = Column(String, default="detected") # detected, acknowledged, dispatched, resolved
+    reported_by = Column(String, nullable=True)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())

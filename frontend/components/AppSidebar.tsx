@@ -1,10 +1,12 @@
+"use client"
+
 import React, { useState } from "react"
-import { Menu, Sparkles, Tent, Flag, Smartphone, MapPin, Activity } from "lucide-react"
+import { Shield, Sparkles, Activity, Tent, FileText, ChevronRight, Menu, Smartphone, Flag, Sliders } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface AppSidebarProps {
-  activePanel: "chat" | "shelters" | "incident" | "report" | null
-  setActivePanel: (v: "chat" | "shelters" | "incident" | "report" | null) => void
+  activePanel: "chat" | "shelters" | "incident" | "report" | "whatif" | null
+  setActivePanel: (v: "chat" | "shelters" | "incident" | "report" | "whatif" | null) => void
   isExpanded: boolean
   setIsExpanded: (v: boolean) => void
 }
@@ -17,18 +19,10 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
         isExpanded ? "w-[320px]" : "w-[72px] items-center"
       )}
     >
-      {/* Menu Button & Title */}
-      <div className={cn("flex items-center w-full mb-8 mt-4", isExpanded ? "justify-between px-6" : "justify-center")}>
+      <div className={cn("flex items-center mb-6 py-4 sticky top-0 bg-[#0E1626]/95 z-10 border-b border-white/5", isExpanded ? "px-6 justify-between" : "px-4 justify-center")}>
         {isExpanded && (
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-orange-500 flex items-center gap-2">
-              <span className="relative flex size-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full size-2 bg-orange-500"></span>
-              </span>
-              HQ COMMAND PROTOCOL
-            </span>
-            <span className="text-[10px] font-mono tracking-wider text-slate-500 mt-1">SECURE UPLINK ACTIVE</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">Menu</span>
           </div>
         )}
         <button 
@@ -39,7 +33,6 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
         </button>
       </div>
 
-      {/* Primary Actions */}
       <div className={cn("flex flex-col gap-3 w-full", isExpanded ? "px-4" : "items-center")}>
         <button 
           onClick={() => setActivePanel(activePanel === "chat" ? null : "chat")}
@@ -124,11 +117,31 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
             Report
           </span>
         </button>
+
+        <button 
+          onClick={() => setActivePanel(activePanel === "whatif" ? null : "whatif")}
+          className={cn(
+            "group flex transition-colors w-full",
+            isExpanded ? "flex-row items-center gap-4 rounded-xl hover:bg-white/5 p-2" : "flex-col items-center gap-1"
+          )}
+        >
+          <div className={cn(
+            "flex items-center justify-center size-10 shrink-0 rounded-xl transition-colors",
+            activePanel === "whatif" ? "bg-white/10 text-white" : "text-slate-400 group-hover:text-slate-300 group-hover:bg-white/5"
+          )}>
+            <Sliders className="size-5" />
+          </div>
+          <span className={cn(
+            "font-medium transition-colors text-left",
+            isExpanded ? "text-sm text-slate-200 group-hover:text-white" : "text-[10px] text-slate-400 group-hover:text-slate-300"
+          )}>
+            What-If
+          </span>
+        </button>
       </div>
 
       <div className={cn("h-px bg-white/10 my-4 shrink-0", isExpanded ? "mx-4 w-auto" : "w-8 mx-auto")} />
 
-      {/* Operational Brief */}
       {isExpanded && (
         <div className="mx-6 mb-auto p-4 bg-white/[0.02] rounded-2xl border border-white/5 flex flex-col gap-3">
           <div className="flex items-center justify-between border-b border-white/5 pb-2 mb-1">
@@ -177,7 +190,6 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
         </div>
       )}
 
-      {/* Bottom Action */}
       <div className={cn("flex flex-col gap-6 w-full mb-4 mt-auto", isExpanded ? "px-4" : "items-center")}>
         <button className={cn(
           "group flex transition-colors w-full",
@@ -194,8 +206,6 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
           </span>
         </button>
       </div>
-      
     </div>
   )
 }
-

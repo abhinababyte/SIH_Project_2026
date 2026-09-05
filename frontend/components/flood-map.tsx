@@ -42,6 +42,16 @@ function shelterIcon(status: string) {
   })
 }
 
+const blockedRouteIcon = L.divIcon({
+  className: "custom-blocked-icon",
+  html: `<div class="relative flex items-center justify-center" style="width: 24px; height: 24px;">
+           <div class="absolute inset-0 bg-red-600 rounded-full animate-ping opacity-20"></div>
+           <div class="bg-red-500 border-2 border-white text-white rounded-full size-6 flex items-center justify-center shadow-lg text-[14px] font-bold">!</div>
+         </div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+});
+
 const userLocationIcon = L.divIcon({
   className: "custom-user-icon",
   html: `<div class="relative flex items-center justify-center" style="width: 16px; height: 16px;">
@@ -62,7 +72,7 @@ function MapEffect() {
   return null
 }
 
-export default function FloodMap({ sensors, onSensorClick, showUserLocation = false }: { sensors: Sensor[], onSensorClick?: (sensor: Sensor) => void, showUserLocation?: boolean }) {
+export default function FloodMap({ sensors, onSensorClick, showUserLocation = false, blockedRoutes = [] }: { sensors: Sensor[], onSensorClick?: (sensor: Sensor) => void, showUserLocation?: boolean, blockedRoutes?: {id: string, lat: number, lng: number, title: string}[] }) {
   const [realUserLoc, setRealUserLoc] = useState<[number, number] | null>(null);
 
   useEffect(() => {
@@ -178,6 +188,14 @@ export default function FloodMap({ sensors, onSensorClick, showUserLocation = fa
         </CircleMarker>
       ))}
 
+      {blockedRoutes.map(route => (
+        <Marker key={route.id} position={[route.lat, route.lng]} icon={blockedRouteIcon}>
+          <Tooltip direction="top" offset={[0, -12]} className="bg-red-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded backdrop-blur-md uppercase tracking-wider">
+            BLOCKED: {route.title}
+          </Tooltip>
+        </Marker>
+      ))}
+      
       {showUserLocation && realUserLoc && (
         <Marker position={realUserLoc} icon={userLocationIcon}>
           <Tooltip permanent direction="bottom" offset={[0, 8]} className="bg-blue-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded-full backdrop-blur-md">
