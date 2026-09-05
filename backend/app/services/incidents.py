@@ -24,12 +24,24 @@ def create_incident(db: Session, incident: IncidentCreate) -> Incident:
     return db_incident
 
 
-def acknowledge_incident(db: Session, incident_id: str) -> Incident | None:
+def _set_status(db: Session, incident_id: str, status: str) -> Incident | None:
     db_incident = db.query(Incident).filter(Incident.id == incident_id).first()
     if not db_incident:
         return None
 
-    db_incident.status = "acknowledged"
+    db_incident.status = status
     db.commit()
     db.refresh(db_incident)
     return db_incident
+
+
+def acknowledge_incident(db: Session, incident_id: str) -> Incident | None:
+    return _set_status(db, incident_id, "acknowledged")
+
+
+def start_evacuation(db: Session, incident_id: str) -> Incident | None:
+    return _set_status(db, incident_id, "evacuating")
+
+
+def complete_incident(db: Session, incident_id: str) -> Incident | None:
+    return _set_status(db, incident_id, "completed")

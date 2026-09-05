@@ -11,6 +11,6 @@ class Incident(Base):
     title = Column(String)
     location = Column(String)
     priority = Column(String)  # low, medium, high, critical
-    status = Column(String, default="detected")  # detected, acknowledged, dispatched, resolved
+    status = Column(String, default="detected")  # detected, acknowledged, evacuating, completed
     reported_by = Column(String, nullable=True)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())

@@ -1,22 +1,19 @@
 // components/IncidentBoard.tsx
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
-  Droplets,
   MapPin,
   Clock,
-  ArrowRight,
   AlertTriangle,
   CheckCircle2,
   Truck,
-  Users,
   Zap,
   X,
 } from "lucide-react";
+
+const API_BASE = "http://localhost:8000";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -24,127 +21,42 @@ interface Incident {
   id: string;
   title: string;
   location: string;
-  severity: Severity;
-  detectedAt: string;
-  waterLevel: number;
-  populationAffected: number;
-  description: string;
+  priority: string;
+  status: ColumnKey;
+  reported_by: string | null;
+  timestamp: string;
 }
 
-type ColumnKey = "detected" | "acknowledged" | "evacuating";
+type ColumnKey = "detected" | "acknowledged" | "evacuating" | "completed";
 
 interface Column {
   key: ColumnKey;
   label: string;
   icon: React.ReactNode;
-  color: string;
-  borderColor: string;
-  bgColor: string;
-  badgeVariant: "destructive" | "default" | "secondary";
 }
-
-// ─── Dummy Data ──────────────────────────────────────────────────────────────
-
-const INITIAL_INCIDENTS: Record<ColumnKey, Incident[]> = {
-  detected: [
-    {
-      id: "INC-001",
-      title: "Flash Flood – Sunder Nagar Nullah",
-      location: "Sunder Nagar, Mandi District, HP",
-      severity: "danger",
-      detectedAt: "2025-01-15T14:32:00Z",
-      waterLevel: 4.2,
-      populationAffected: 1200,
-      description:
-        "Sudden water surge detected. Nullah breached at 2 points. Immediate evacuation required for low-lying settlements.",
-    },
-    {
-      id: "INC-002",
-      title: "Landslide Risk – NH-21 Near Aut",
-      location: "Aut, Mandi District, HP",
-      severity: "warning",
-      detectedAt: "2025-01-15T15:10:00Z",
-      waterLevel: 1.8,
-      populationAffected: 340,
-      description:
-        "Soil moisture sensors reporting saturation > 85%. Road blockage likely within 2 hours.",
-    },
-    {
-      id: "INC-003",
-      title: "River Swelling – Beas at Pandoh",
-      location: "Pandoh Dam, Mandi District, HP",
-      severity: "watch",
-      detectedAt: "2025-01-15T15:45:00Z",
-      waterLevel: 2.5,
-      populationAffected: 80,
-      description:
-        "Water level rising steadily. Dam operators notified. Monitoring continues.",
-    },
-  ],
-  acknowledged: [
-    {
-      id: "INC-004",
-      title: "Drainage Overflow – Joginder Nagar",
-      location: "Joginder Nagar, Mandi District, HP",
-      severity: "warning",
-      detectedAt: "2025-01-15T13:20:00Z",
-      waterLevel: 3.1,
-      populationAffected: 560,
-      description:
-        "NDRF team dispatched. Evacuation shelters activated at Government Senior Secondary School.",
-    },
-  ],
-  evacuating: [
-    {
-      id: "INC-005",
-      title: "Embankment Breach – Chauntra",
-      location: "Chauntra, Mandi District, HP",
-      severity: "danger",
-      detectedAt: "2025-01-15T12:00:00Z",
-      waterLevel: 5.0,
-      populationAffected: 2100,
-      description:
-        "62% of affected population evacuated. 3 NDRF boats operational. Medical camp set up.",
-    },
-  ],
-};
 
 // ─── Column Config ───────────────────────────────────────────────────────────
 
 const COLUMNS: Column[] = [
-  {
-    key: "detected",
-    label: "Detected",
-    icon: <Zap className="h-4 w-4" />,
-    color: "text-red-500",
-    borderColor: "border-red-500/30",
-    bgColor: "bg-red-500/5",
-    badgeVariant: "destructive",
-  },
-  {
-    key: "acknowledged",
-    label: "Acknowledged",
-    icon: <CheckCircle2 className="h-4 w-4" />,
-    color: "text-amber-500",
-    borderColor: "border-amber-500/30",
-    bgColor: "bg-amber-500/5",
-    badgeVariant: "default",
-  },
-  {
-    key: "evacuating",
-    label: "Evacuating",
-    icon: <Truck className="h-4 w-4" />,
-    color: "text-emerald-500",
-    borderColor: "border-emerald-500/30",
-    bgColor: "bg-emerald-500/5",
-    badgeVariant: "secondary",
-  },
+  { key: "detected", label: "Detected", icon: <Zap className="h-4 w-4" /> },
+  { key: "acknowledged", label: "Rescuers Dispatched", icon: <Truck className="h-4 w-4" /> },
+  { key: "evacuating", label: "Evacuation in Progress", icon: <AlertTriangle className="h-4 w-4" /> },
+  { key: "completed", label: "Completed", icon: <CheckCircle2 className="h-4 w-4" /> },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 import { SeverityBadge } from "@/components/severity-badge"
 import { Severity } from "@/lib/flood-data"
+
+function priorityToSeverity(priority: string): Severity {
+  switch (priority?.toLowerCase()) {
+    case "critical": return "danger";
+    case "high": return "warning";
+    case "medium": return "watch";
+    default: return "safe";
+  }
+}
 
 function formatTime(iso: string): string {
   const date = new Date(iso);
@@ -155,56 +67,63 @@ function formatTime(iso: string): string {
   });
 }
 
+function emptyBoard(): Record<ColumnKey, Incident[]> {
+  return { detected: [], acknowledged: [], evacuating: [], completed: [] };
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
-  const [incidents, setIncidents] = useState<Record<ColumnKey, Incident[]>>(INITIAL_INCIDENTS);
-  
-  // Fetch real incidents from backend
-  React.useEffect(() => {
-    const fetchIncidents = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/incidents");
-        const data = await response.json();
-        
-        // Group by status
-        const detected = data.filter((i: any) => i.status === "DETECTED");
-        const acknowledged = data.filter((i: any) => i.status === "ACKNOWLEDGED");
-        const evacuating = data.filter((i: any) => i.status === "EVACUATING");
-        
-        setIncidents(prev => ({
-          detected: detected.length > 0 ? detected : prev.detected,
-          acknowledged: acknowledged.length > 0 ? acknowledged : prev.acknowledged,
-          evacuating: prev.evacuating // keep dummy for now
-        }));
-      } catch (err) {
-        console.error("Failed to fetch incidents", err);
+  const [incidents, setIncidents] = useState<Record<ColumnKey, Incident[]>>(emptyBoard());
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const fetchIncidents = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/incidents`);
+      if (!response.ok) throw new Error("Failed to load incidents");
+      const data: Incident[] = await response.json();
+
+      const board = emptyBoard();
+      for (const incident of data) {
+        (board[incident.status] ?? board.detected).push(incident);
       }
-    };
-    
+      setIncidents(board);
+      setLoadError(null);
+    } catch (err) {
+      console.error("Failed to fetch incidents", err);
+      setLoadError("Could not reach the incidents server. Is the backend running?");
+    }
+  };
+
+  useEffect(() => {
     fetchIncidents();
-    // Poll every 2 seconds
     const interval = setInterval(fetchIncidents, 2000);
     return () => clearInterval(interval);
   }, []);
 
-  const totalIncidents = Object.values(incidents).flat().length;
-
-  const acknowledgeIncident = (incidentToMove: Incident) => {
-    setIncidents(prev => ({
+  const moveIncident = (incident: Incident, from: ColumnKey, to: ColumnKey) => {
+    setIncidents((prev) => ({
       ...prev,
-      detected: prev.detected.filter(i => i.id !== incidentToMove.id),
-      acknowledged: [incidentToMove, ...prev.acknowledged]
+      [from]: prev[from].filter((i) => i.id !== incident.id),
+      [to]: [{ ...incident, status: to }, ...prev[to]],
     }));
   };
 
-  const resolveIncident = (incidentToMove: Incident) => {
-    setIncidents(prev => ({
-      ...prev,
-      acknowledged: prev.acknowledged.filter(i => i.id !== incidentToMove.id),
-      evacuating: prev.evacuating.filter(i => i.id !== incidentToMove.id)
-    }));
+  const transition = async (incident: Incident, from: ColumnKey, to: ColumnKey, endpoint: string) => {
+    // Update instantly, then persist — the next poll reconciles if this fails.
+    moveIncident(incident, from, to);
+    try {
+      const res = await fetch(`${API_BASE}/api/incidents/${incident.id}/${endpoint}`, { method: "POST" });
+      if (!res.ok) throw new Error(`Failed to ${endpoint} incident`);
+    } catch (err) {
+      console.error(err);
+      setLoadError(`Could not update incident ${incident.id}. It will re-sync shortly.`);
+    }
   };
+
+  const acknowledgeIncident = (incident: Incident) => transition(incident, "detected", "acknowledged", "acknowledge");
+  const startEvacuation = (incident: Incident) => transition(incident, "acknowledged", "evacuating", "start-evacuation");
+  const completeIncident = (incident: Incident) => transition(incident, "evacuating", "completed", "complete");
 
   return (
     <div className="flex h-full w-[400px] flex-col overflow-hidden bg-[#0a101d] border-r border-white/5  shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
@@ -230,6 +149,10 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
           </button>
         </div>
       </div>
+
+      {loadError && (
+        <p className="mx-6 mb-2 text-[11px] text-rose-400">{loadError}</p>
+      )}
 
       {/* Kanban Columns */}
       <div className="grid grid-cols-1 gap-6 overflow-y-auto no-scrollbar flex-1 p-6 pt-2 pb-6">
@@ -269,65 +192,68 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
                         <h3 className="text-[15px] font-medium text-slate-200 leading-tight">
                           {incident.title}
                         </h3>
-                        <SeverityBadge severity={incident.severity} showDot={false} className="scale-90 origin-right border border-white/5 bg-white/5" />
+                        <SeverityBadge severity={priorityToSeverity(incident.priority)} showDot={false} className="scale-90 origin-right border border-white/5 bg-white/5" />
                       </div>
-                      
-                      <p className="text-[13px] text-slate-400 leading-relaxed mb-4">
-                        {incident.description}
-                      </p>
 
                       {/* Meta Row */}
                       <div className="flex flex-wrap gap-x-4 gap-y-2 text-[10px] linear-label text-slate-500 mb-4">
                         <span className="inline-flex items-center gap-1.5">
                           <MapPin className="size-3" />
-                          {incident.location.split(",")[0]}
+                          {incident.location?.split(",")[0]}
                         </span>
                         <span className="inline-flex items-center gap-1.5">
                           <Clock className="size-3" />
-                          {formatTime(incident.detectedAt)}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <Droplets className="size-3" />
-                          {incident.waterLevel}m
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <Users className="size-3" />
-                          {incident.populationAffected.toLocaleString("en-IN")}
+                          {formatTime(incident.timestamp)}
                         </span>
                       </div>
 
                       {/* Status Action */}
-                      {col.key === "detected" ? (
-                        <button 
+                      {col.key === "detected" && (
+                        <button
                           onClick={() => acknowledgeIncident(incident)}
                           className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-bold bg-orange-500/20 text-orange-500 hover:bg-orange-500 hover:text-white rounded-lg border border-orange-500/50 tracking-wide mt-2 transition-all shadow-[0_0_10px_rgba(249,115,22,0.2)] hover:shadow-[0_0_15px_rgba(249,115,22,0.4)]"
                         >
                           <AlertTriangle className="size-3" />
                           ACKNOWLEDGE & DISPATCH
                         </button>
-                      ) : (
+                      )}
+
+                      {col.key === "acknowledged" && (
                         <div className="flex flex-col gap-2 mt-2">
                           <div className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-medium bg-[#5E6AD2]/10 text-[#5E6AD2] rounded-lg border border-[#5E6AD2]/20 tracking-wide">
-                            {col.key === "acknowledged" && (
-                              <>
-                                <Truck className="size-3" />
-                                Rescuers dispatched
-                              </>
-                            )}
-                            {col.key === "evacuating" && (
-                              <>
-                                <CheckCircle2 className="size-3" />
-                                Evacuation in progress
-                              </>
-                            )}
+                            <Truck className="size-3" />
+                            Rescuers dispatched
                           </div>
-                          <button 
-                            onClick={() => resolveIncident(incident)}
+                          <button
+                            onClick={() => startEvacuation(incident)}
+                            className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-bold bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-lg border border-emerald-500/30 tracking-wide transition-all shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                          >
+                            <AlertTriangle className="size-3" />
+                            EVACUATION STARTED
+                          </button>
+                        </div>
+                      )}
+
+                      {col.key === "evacuating" && (
+                        <div className="flex flex-col gap-2 mt-2">
+                          <div className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-medium bg-[#5E6AD2]/10 text-[#5E6AD2] rounded-lg border border-[#5E6AD2]/20 tracking-wide">
+                            <CheckCircle2 className="size-3" />
+                            Evacuation in progress
+                          </div>
+                          <button
+                            onClick={() => completeIncident(incident)}
                             className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-bold bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-lg border border-emerald-500/30 tracking-wide transition-all shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]"
                           >
                             <CheckCircle2 className="size-3" />
-                            MARK AS RESOLVED
+                            EVACUATION DONE
                           </button>
+                        </div>
+                      )}
+
+                      {col.key === "completed" && (
+                        <div className="w-full h-8 flex items-center justify-center gap-1.5 text-[11px] font-bold bg-emerald-500/10 text-emerald-500 rounded-lg border border-emerald-500/20 tracking-wide mt-2">
+                          <CheckCircle2 className="size-3" />
+                          RESOLVED
                         </div>
                       )}
                     </div>
@@ -341,4 +267,3 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
     </div>
   );
 }
-
