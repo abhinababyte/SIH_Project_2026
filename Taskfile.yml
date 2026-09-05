@@ -9,8 +9,8 @@ tasks:
   setup:
     desc: Installs required packages for the project
     cmds:
-      - bun install 
-      - uv --project apps/api sync
+      - bun install
+      - uv --project backend sync
 
   dev:all:
     desc: Start all development servers in a termux server
