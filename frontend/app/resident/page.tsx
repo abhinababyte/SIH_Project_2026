@@ -340,19 +340,7 @@ export default function ResidentDashboard() {
             >
               Find Nearest Shelter
             </button>
-            <button 
-              onClick={() => {
-                const el = document.getElementById('micro-shelter-form');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth' });
-                  // Focus the first input after scrolling
-                  setTimeout(() => el.querySelector('input')?.focus(), 800);
-                }
-              }}
-              className="px-4 py-2.5 text-sm bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-medium rounded-full border border-emerald-500/20 transition-colors whitespace-nowrap"
-            >
-              Register Micro-Shelter
-            </button>
+
             <button 
               onClick={() => {
                 const nav = document.getElementById('landmark-navigation');
@@ -710,9 +698,9 @@ export default function ResidentDashboard() {
           <p className="text-slate-400 mt-2">Real-time capacity tracking for verified community shelters and registered safe houses.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Main Shelters List */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="space-y-4">
             
             {/* Open Shelter */}
             <div className="bg-[#121923] border border-emerald-500/30 rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row gap-6 items-center shadow-lg">
@@ -732,6 +720,25 @@ export default function ResidentDashboard() {
                   0.8 km away • 12 min walk
                 </p>
                 
+                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
+                    <div className="text-lg font-bold text-slate-200">12</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Women</div>
+                    <div className="text-lg font-bold text-slate-200">10</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Children</div>
+                    <div className="text-lg font-bold text-slate-200">8</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-rose-500/70 mb-1 font-mono">Injured</div>
+                    <div className="text-lg font-bold text-rose-400">2</div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs font-mono text-slate-400">
                     <span>Capacity: 30%</span>
@@ -769,6 +776,25 @@ export default function ResidentDashboard() {
                   1.2 km away • 18 min walk
                 </p>
                 
+                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
+                    <div className="text-lg font-bold text-slate-200">18</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Women</div>
+                    <div className="text-lg font-bold text-slate-200">15</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Children</div>
+                    <div className="text-lg font-bold text-slate-200">9</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-rose-500/70 mb-1 font-mono">Injured</div>
+                    <div className="text-lg font-bold text-rose-400">4</div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs font-mono text-slate-400">
                     <span>Capacity: 85%</span>
@@ -806,6 +832,25 @@ export default function ResidentDashboard() {
                   0.3 km away • Not accepting evacuees
                 </p>
                 
+                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4 opacity-75">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
+                    <div className="text-lg font-bold text-slate-200">8</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Women</div>
+                    <div className="text-lg font-bold text-slate-200">7</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Children</div>
+                    <div className="text-lg font-bold text-slate-200">5</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-rose-500/70 mb-1 font-mono">Injured</div>
+                    <div className="text-lg font-bold text-rose-400">7</div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs font-mono text-rose-400/50">
                     <span>Capacity: 100%</span>
@@ -820,47 +865,7 @@ export default function ResidentDashboard() {
 
           </div>
 
-          {/* Micro-Shelter Registration */}
-          <div id="micro-shelter-form" className="bg-[#121923] border border-white/5 rounded-3xl p-6 relative overflow-hidden flex flex-col scroll-mt-24">
-            <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-              <User className="size-32" />
-            </div>
-            
-            <h3 className="text-xl font-serif text-white mb-2 relative z-10">Register Micro-Shelter</h3>
-            <p className="text-xs text-slate-400 mb-6 relative z-10">
-              Have safe high ground? Open your doors to neighbors in need. Your location will be securely shared only with verified locals.
-            </p>
 
-            <form className="flex flex-col gap-4 relative z-10 mt-auto" onSubmit={(e) => { e.preventDefault(); alert("Micro-shelter registered successfully."); }}>
-              <div>
-                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Shelter Name / House Info</label>
-                <input type="text" placeholder="e.g. Sharma Residence (2nd Floor)" className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50" />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Capacity</label>
-                  <input type="number" placeholder="No. of people" className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50" />
-                </div>
-                <div>
-                  <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Contact No.</label>
-                  <input type="tel" placeholder="10-digit number" className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50" />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Precise Location</label>
-                <button type="button" className="w-full bg-black/30 hover:bg-black/50 border border-white/10 rounded-lg p-3 text-sm text-emerald-400 flex items-center justify-center gap-2 transition-colors">
-                  <MapPin className="size-4" />
-                  Use Current Location
-                </button>
-              </div>
-
-              <button type="submit" className="w-full py-4 mt-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-colors">
-                List as Safe House
-              </button>
-            </form>
-          </div>
         </div>
       </section>
 

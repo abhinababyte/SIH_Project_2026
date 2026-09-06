@@ -38,7 +38,7 @@ export default function TacticalCommandCenter() {
     const storedName = localStorage.getItem("hillshield_user_name");
     if (storedName) setUserName(storedName);
     
-    // DEMO: Transient Toast Notifications for Critical Real-Time Events (Looping every 25 seconds)
+    // DEMO: Transient Toast Notifications for Critical Real-Time Events (Looping every 30 minutes)
     let t1: NodeJS.Timeout, t2: NodeJS.Timeout, t3: NodeJS.Timeout, t4: NodeJS.Timeout;
     
     const showToasts = () => {
@@ -79,9 +79,9 @@ export default function TacticalCommandCenter() {
       }, 20000);
     };
 
-    // Run once initially, then loop every 25 seconds
+    // Run once initially, then loop every 30 minutes
     showToasts();
-    const cycleInterval = setInterval(showToasts, 25000);
+    const cycleInterval = setInterval(showToasts, 1800000);
 
     return () => {
       clearInterval(cycleInterval);
