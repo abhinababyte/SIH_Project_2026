@@ -48,4 +48,6 @@ def engineer_features(data: TelemetryData) -> pd.DataFrame:
     df["River_Rain1"] = df["River_Water_Level_m"] * df["Rain_1h_mm"]
     df["Doorstep_Threat"] = df["River_Water_Level_m"] * df["River_Proximity_Score"]
 
+    df["Land_Cover_Type"] = df["Land_Cover_Type"].astype("category")
+    
     return df[EXPECTED_COLUMNS]
