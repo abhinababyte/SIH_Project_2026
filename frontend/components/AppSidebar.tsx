@@ -190,22 +190,7 @@ export function AppSidebar({ activePanel, setActivePanel, isExpanded, setIsExpan
         </div>
       )}
 
-      <div className={cn("flex flex-col gap-6 w-full mb-4 mt-auto", isExpanded ? "px-4" : "items-center")}>
-        <button className={cn(
-          "group flex transition-colors w-full",
-          isExpanded ? "flex-row items-center gap-4 rounded-xl hover:bg-white/5 p-2" : "flex-col items-center gap-1"
-        )}>
-          <div className="flex items-center justify-center size-10 shrink-0 rounded-xl text-slate-400 group-hover:text-slate-300 group-hover:bg-white/5 transition-colors">
-            <Smartphone className="size-5" />
-          </div>
-          <span className={cn(
-            "font-medium transition-colors text-left",
-            isExpanded ? "text-sm text-slate-200 group-hover:text-white" : "text-[10px] text-slate-400 group-hover:text-slate-300"
-          )}>
-            Get app
-          </span>
-        </button>
-      </div>
+
     </div>
   )
 }
