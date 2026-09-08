@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { User, Radio, Eye, EyeOff, ArrowRight, ShieldCheck, ChevronDown, Activity, AlertTriangle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 import dynamic from "next/dynamic";
 import { useSimulation } from "@/components/simulation-provider";
 
@@ -52,7 +53,7 @@ export default function LoginPage() {
             password: password 
           };
 
-      const res = await fetch(`http://localhost:8000${endpoint}`, {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

@@ -4,6 +4,7 @@ import { Loader2, BrainCircuit } from "lucide-react"
 import { Droplets, Thermometer, Waves, ShieldAlert, Activity, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { type Sensor } from "@/lib/flood-data"
+import { API_BASE } from "@/lib/api"
 
 interface RiskDetailsProps {
   rain: number
@@ -25,7 +26,7 @@ export function RiskDetails({ rain, soil, river, severity, selectedSensor }: Ris
   const fetchXaiExplanation = async () => {
     setIsLoadingXai(true);
     try {
-      const response = await fetch("http://localhost:8000/api/predict/explain", {
+      const response = await fetch(`${API_BASE}/api/predict/explain`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

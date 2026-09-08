@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Mountain, Droplets, AlertTriangle, Activity, ShieldAlert, User, MapPin } from "lucide-react";
-
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "@/lib/api";
 
 const HAZARD_TYPES = [
   { value: "Landslide", label: "Landslide", icon: Mountain, activeClasses: "bg-rose-500/20 border-rose-500/50 text-rose-400" },

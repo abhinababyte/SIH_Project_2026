@@ -16,4 +16,5 @@ dependencies = [
     "python-jose[cryptography]",
     "bcrypt",
     "shap",
+    "python-dotenv",
 ]

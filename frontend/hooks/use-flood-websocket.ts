@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { WS_BASE } from "@/lib/api";
 
 export interface FloodAlertEvent {
   type: string;
@@ -20,7 +21,7 @@ export function useFloodWebsocket() {
     // In the web version, we assume the user is online if they can load the site.
     // The actual offline/online toggle will be implemented in the native app.
     
-    const ws = new WebSocket("ws://localhost:8000/ws/dashboard");
+    const ws = new WebSocket(`${WS_BASE}/ws/dashboard`);
 
     ws.onopen = () => {
       console.log("Connected to HillShield Command Center");

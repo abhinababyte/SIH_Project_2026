@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Send, Helicopter, CheckCircle, Clock, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "@/lib/api";
 
 interface Escalation {
   id: string;

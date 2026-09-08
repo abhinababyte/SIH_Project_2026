@@ -6,6 +6,11 @@ ENV/
 env.bak/
 venv.bak/
 
+# Environment variable files (only .env.example should be committed)
+.env
+.env.local
+.env.*.local
+
 # IDEs
 .idea/
 .vscode/

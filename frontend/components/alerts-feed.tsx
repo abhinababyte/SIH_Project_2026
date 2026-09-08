@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from "react"
 import { AlertTriangle, Bell, MapPin, Globe } from "lucide-react"
-import { ALERTS, timeAgo } from "@/lib/flood-data"
+import { ALERTS, timeAgo, type Severity } from "@/lib/flood-data"
 import {
   SeverityBadge,
   severityText,
 } from "@/components/severity-badge"
 import { cn } from "@/lib/utils"
+import { API_BASE } from "@/lib/api"
 
 export function AlertsFeed({ userType = "responder" }: { userType?: "resident" | "responder" }) {
   const [language, setLanguage] = useState<"en" | "hi" | "bn">("en");
@@ -24,7 +25,7 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
       body: "Govt. School (North Wing) is now open and accepting evacuees. Capacity currently at 30%.",
       area: "North Sector",
       issuedMinsAgo: 5,
-      severity: "safe",
+      severity: "safe" as Severity,
     },
     {
       id: "r2",
@@ -32,7 +33,7 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
       body: "Community verified: Bridge washout at River Road. DO NOT use this route.",
       area: "River Road",
       issuedMinsAgo: 12,
-      severity: "warning",
+      severity: "warning" as Severity,
     },
     {
       id: "r3",
@@ -40,7 +41,7 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
       body: "Water levels rising rapidly in the Lower Basin. Prepare for immediate evacuation.",
       area: "Lower Basin",
       issuedMinsAgo: 24,
-      severity: "danger",
+      severity: "danger" as Severity,
     }
   ], []);
 
@@ -56,7 +57,7 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
     const textsToTranslate = activeAlerts.flatMap(a => [a.title, a.body, a.area, "Community Alerts"]);
     
     Promise.all(textsToTranslate.map(text => 
-      fetch("http://127.0.0.1:8000/api/bhashini/translate", {
+      fetch(`${API_BASE}/api/bhashini/translate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, target_language: language })
@@ -118,7 +119,7 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
           </div>
         )}
         
-        {activeAlerts.map((a: any) => (
+        {activeAlerts.map((a) => (
           <div
             key={a.id}
             className="linear-card p-4 transition-all duration-300 group"

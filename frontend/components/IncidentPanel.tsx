@@ -12,8 +12,7 @@ import {
   Zap,
   X,
 } from "lucide-react";
-
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "@/lib/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -97,7 +96,7 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
 
   useEffect(() => {
     fetchIncidents();
-    const interval = setInterval(fetchIncidents, 2000);
+    const interval = setInterval(fetchIncidents, 60_000); // poll every 60 s — reduces backend pressure
     return () => clearInterval(interval);
   }, []);
 
