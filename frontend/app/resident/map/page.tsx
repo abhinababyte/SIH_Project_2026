@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ShieldAlert, Activity, Navigation, CloudRain, Droplets, Mountain, Phone, Menu, User, Bell, BellRing, MessageCircle, ArrowRight, Settings, LogOut, Trash2, MapPin, AlertTriangle } from "lucide-react";
+import { ShieldAlert, Activity, Navigation, CloudRain, Droplets, Mountain, Phone, Menu, User, Bell, BellRing, MessageCircle, ArrowRight, ArrowLeft, Settings, LogOut, Trash2, MapPin, AlertTriangle } from "lucide-react";
 import { SosDetails } from "@/components/sos-details";
 import { RiskDetails } from "@/components/risk-details";
 import CitizenSafetyChat from "@/components/CitizenSafetyChat";
@@ -95,24 +95,27 @@ export default function ResidentLiveMap() {
       `}} />
 
       {/* TOP HEADER BAR */}
-      <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between pr-6 pointer-events-auto">
-        <div className="flex items-center h-full">
-          <div className="h-16 w-[72px] shrink-0 flex items-center justify-center border-r border-white/5 overflow-hidden">
-            <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-full object-cover object-center" />
-          </div>
-          
-          <div className="pl-6 flex items-center gap-6">
-            <div>
-              <h1 className="text-sm font-bold text-emerald-500 tracking-wide uppercase font-serif">HILLSHIELD: RESIDENT</h1>
+      <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-2.5 sm:px-6 pointer-events-auto">
+        <div className="flex items-center h-full min-w-0">
+          <Link href="/resident" className="flex items-center h-full group" title="Back to Resident Dashboard">
+            <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-2 sm:pr-4">
+              <img src="/HillShield.png" alt="HillShield Logo" className="h-9 sm:h-12 w-auto object-contain" />
             </div>
-          </div>
+            
+            <div className="pl-2 sm:pl-4 flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+              <ArrowLeft className="size-3.5 text-slate-400 group-hover:text-emerald-400 transition-colors shrink-0" />
+              <h1 className="text-xs sm:text-sm font-bold text-emerald-500 tracking-wide uppercase font-serif whitespace-nowrap">
+                <span className="hidden sm:inline">HILLSHIELD: </span><span>RESIDENT</span>
+              </h1>
+            </div>
+          </Link>
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
            {/* SOS Button */}
            <button 
              onClick={() => setIsSosOpen(!isSosOpen)}
-             className="px-3 py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none"
+             className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[9px] sm:text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-1 sm:gap-1.5 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none shrink-0"
            >
              <Phone className="size-3 hidden sm:block" />
              SOS
@@ -121,13 +124,13 @@ export default function ResidentLiveMap() {
            {/* Simulate Danger Button */}
            <button 
              onClick={() => setSurvivalMode(true)}
-             className="px-3 py-1.5 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 text-[10px] font-mono tracking-widest font-bold uppercase transition-colors flex items-center gap-2"
+             className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 text-[9px] sm:text-[10px] font-mono tracking-wider font-bold uppercase transition-colors flex items-center gap-1 sm:gap-1.5 shrink-0"
            >
              <ShieldAlert className="size-3 hidden sm:block" />
-             SIMULATE DANGER
+             <span className="hidden sm:inline">SIMULATE </span>DANGER
            </button>
            
-           <div className="w-px h-6 bg-white/10 mx-2 hidden sm:block" />
+           <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" />
 
            {/* Metrics */}
            <div className="hidden md:flex items-center gap-2">
@@ -151,26 +154,28 @@ export default function ResidentLiveMap() {
            {/* Notification Bell */}
            <button 
              onClick={() => setIsAlertsOpen(!isAlertsOpen)}
-             className="relative flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors"
+             className="relative flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-slate-300 shrink-0"
+             aria-label="Alerts"
            >
-             <Bell className="size-5 text-slate-300" />
-             <span className="absolute top-1.5 right-1.5 size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626]" />
+             <Bell className="size-4 sm:size-5" />
+             <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 size-2 sm:size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626]" />
            </button>
 
            {/* Account Dropdown */}
-           <div className="relative">
+           <div className="relative shrink-0">
              <button 
                onClick={() => setIsAccountOpen(!isAccountOpen)}
-               className="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner"
+               className="flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner text-slate-300 shrink-0"
+               aria-label="User Account"
              >
-               <User className="size-5 text-slate-300" />
+               <User className="size-4 sm:size-5" />
              </button>
 
              {/* Dropdown Content */}
              {isAccountOpen && (
                <>
                  <div className="fixed inset-0 z-40" onClick={() => setIsAccountOpen(false)} />
-                 <div className="absolute right-0 mt-12 w-56 rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
+                 <div className="absolute right-0 mt-2 sm:mt-12 w-56 max-w-[calc(100vw-1.5rem)] rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
                    <div className="px-4 py-3 border-b border-white/5 bg-white/5">
                      <p className="text-sm font-medium text-white">{userName}</p>
                      <p className="text-xs text-slate-400">ID: R-402</p>
@@ -231,7 +236,7 @@ export default function ResidentLiveMap() {
       {isAlertsOpen && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setIsAlertsOpen(false)} />
-          <div className="fixed top-28 right-20 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[420px] max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="fixed top-24 sm:top-28 right-4 sm:right-20 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[calc(100vw-2rem)] max-w-[420px] max-h-[80vh] sm:max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <AlertsFeed userType="resident" />
           </div>
         </>
@@ -241,7 +246,7 @@ export default function ResidentLiveMap() {
       {isSosOpen && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setIsSosOpen(false)} />
-          <div className="fixed top-28 right-6 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[320px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="fixed top-24 sm:top-28 right-4 sm:right-6 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[calc(100vw-2rem)] max-w-[320px] max-h-[80vh] overflow-y-auto flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <SosDetails userType="resident" />
           </div>
         </>
@@ -265,17 +270,17 @@ export default function ResidentLiveMap() {
               className="fixed inset-0 z-30" 
               onClick={() => setIsRiskOpen(false)} 
             />
-            <div className="absolute top-6 right-6 z-40 pointer-events-auto bg-[#0a0f18]/95 backdrop-blur-xl border border-white/10 w-[420px] max-w-[calc(100vw-3rem)] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+            <div className="absolute top-20 sm:top-6 right-3 sm:right-6 z-40 pointer-events-auto bg-[#0a0f18]/95 backdrop-blur-xl border border-white/10 w-[calc(100vw-1.5rem)] sm:w-[420px] max-h-[80vh] overflow-y-auto flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
               <RiskDetails rain={rain} soil={soil} river={river} severity={severity} selectedSensor={selectedSensor} />
             </div>
           </>
         )}
 
         {/* MAP LEGEND (COPIED EXACTLY FROM RESPONDER, MOVED TO LEFT TO AVOID AI CHAT) */}
-        <div className="absolute bottom-6 left-6 z-30 pointer-events-auto bg-[#0a0f18]/90 backdrop-blur-md px-5 py-4 rounded-xl shadow-xl border border-white/10 flex flex-col gap-4">
+        <div className="hidden sm:flex absolute bottom-6 left-4 sm:left-6 z-30 pointer-events-auto bg-[#0a0f18]/90 backdrop-blur-md px-4 sm:px-5 py-3 sm:py-4 rounded-xl shadow-xl border border-white/10 flex-col gap-3 sm:gap-4 max-w-[calc(100vw-6rem)]">
           <h4 className="text-[10px] font-mono tracking-wider text-slate-400 uppercase border-b border-white/5 pb-2">Tactical Legend</h4>
           
-          <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+          <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-3 sm:gap-y-4">
             <div className="flex flex-col gap-2">
               <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Routes & Paths</span>
               <div className="flex items-center gap-2 text-[11px] text-slate-300">
@@ -309,30 +314,30 @@ export default function ResidentLiveMap() {
       </main>
       
       {/* Persistent Ask AI Floating Button */}
-      <div className="fixed bottom-24 right-6 z-50 flex flex-col items-end gap-4">
+      <div className="fixed bottom-20 sm:bottom-24 right-4 sm:right-6 z-50 flex flex-col items-end gap-3 sm:gap-4">
         {isAiChatOpen && (
-          <div className="w-[350px] shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-[#0E1626]">
+          <div className="w-[calc(100vw-2rem)] sm:w-[350px] shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-[#0E1626]">
             <CitizenSafetyChat isOpen={isAiChatOpen} onClose={() => setIsAiChatOpen(false)} userType="resident" />
           </div>
         )}
         <button 
           onClick={() => setIsAiChatOpen(!isAiChatOpen)}
-          className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 p-4 rounded-full shadow-lg flex items-center gap-2 font-bold transition-transform hover:scale-105"
+          className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 p-3 sm:p-4 rounded-full shadow-lg flex items-center gap-2 font-bold transition-transform hover:scale-105"
         >
-          <MessageCircle className="size-6" />
-          {!isAiChatOpen && <span>Shield AI</span>}
+          <MessageCircle className="size-5 sm:size-6" />
+          {!isAiChatOpen && <span className="text-xs sm:text-sm">Shield AI</span>}
         </button>
       </div>
 
-      <footer className="w-full bg-[#0a0f18]/95 backdrop-blur-xl border-t border-white/5 px-6 lg:px-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] font-mono tracking-widest uppercase text-slate-500">
+      <footer className="w-full bg-[#0a0f18]/95 backdrop-blur-xl border-t border-white/5 px-4 sm:px-6 lg:px-12 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)] safe-bottom">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-slate-500">
           <span>&copy; {new Date().getFullYear()} HILLSHIELD SYSTEMS</span>
           <a href="#" className="hover:text-slate-300 transition-colors">Privacy Protocol</a>
           <a href="#" className="hover:text-slate-300 transition-colors">Terms of Access</a>
         </div>
         
         <div className="text-[10px] font-mono tracking-wider text-slate-500 flex items-center">
-          <span className="flex items-center gap-1.5 text-slate-400">
+          <span className="flex items-center gap-1.5 text-slate-400 text-center">
             Created with <span className="text-rose-500 text-sm">❤️</span> by <strong className="text-emerald-500 font-bold tracking-widest">Codex Gigas</strong> for India
           </span>
         </div>

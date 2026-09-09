@@ -88,19 +88,19 @@ export default function LoginPage() {
       
       {/* HEADER */}
       <header className="sticky top-0 z-50 h-16 bg-slate-950/80 backdrop-blur-md border-b border-white/5 flex flex-col justify-center">
-        <div className="px-6 flex items-center justify-between w-full h-full">
-          <div className="flex items-center h-full">
-            <div className="h-12 w-auto shrink-0 flex items-center justify-center">
-                <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-auto object-contain" />
-              </div>
-            <div className="pl-4">
-              <h1 className="text-sm font-bold text-white tracking-wide">HillShield</h1>
-              <p className="text-[10px] text-slate-400 font-mono tracking-wider uppercase hidden sm:block">Natural Disaster Detection Intelligence</p>
+        <div className="px-3 sm:px-6 flex items-center justify-between w-full h-full">
+          <div className="flex items-center h-full min-w-0">
+            <div className="h-9 sm:h-12 w-auto shrink-0 flex items-center justify-center">
+              <img src="/HillShield.png" alt="HillShield Logo" className="h-full w-auto object-contain" />
+            </div>
+            <div className="pl-2.5 sm:pl-4 min-w-0">
+              <h1 className="text-sm font-bold text-white tracking-wide whitespace-nowrap">HillShield</h1>
+              <p className="text-[9px] sm:text-[10px] text-slate-400 font-mono tracking-wider uppercase hidden sm:block truncate">Natural Disaster Detection Intelligence</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase text-slate-400">
+          <div className="flex items-center gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-slate-400 shrink-0">
             <span className="hidden sm:inline">District Helpline: <strong className="text-white">1077 / 112</strong></span>
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 shrink-0">
               <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-emerald-400 font-bold">SECURE UPLINK</span>
             </div>
@@ -110,10 +110,10 @@ export default function LoginPage() {
 
       {/* LIVE FEED TICKER */}
       <div className="h-8 bg-rose-500/10 border-b border-rose-500/20 flex items-center overflow-hidden relative z-40">
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-[#0f0a10] z-20 flex items-center pl-6 pr-4 shadow-[10px_0_15px_-3px_rgba(15,10,16,1)] border-r border-rose-500/20">
-          <span className="text-[10px] font-mono font-bold text-rose-500 tracking-wider">LIVE FEED</span>
+        <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-32 bg-[#0f0a10] z-20 flex items-center pl-3 sm:pl-6 pr-2 sm:pr-4 shadow-[10px_0_15px_-3px_rgba(15,10,16,1)] border-r border-rose-500/20">
+          <span className="text-[9px] sm:text-[10px] font-mono font-bold text-rose-500 tracking-wider">LIVE FEED</span>
         </div>
-        <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap text-[10px] font-mono tracking-widest pl-40 text-slate-300 relative z-10">
+        <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap text-[9px] sm:text-[10px] font-mono tracking-widest pl-28 sm:pl-40 text-slate-300 relative z-10">
           <span className="text-amber-400">TEESTA</span> - RISE RATE 0.8M / HR [MONITOR] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <span className="text-emerald-400">BEAS</span> - ACCESS ROUTE 04 CLEAR [STABLE] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <span className="text-amber-400">CHAMOLI</span> - SOIL SATURATION 85% [ELEVATED RISK] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -122,13 +122,13 @@ export default function LoginPage() {
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 relative flex flex-col lg:flex-row min-h-[800px]">
+      <main className="flex-1 relative flex flex-col lg:flex-row min-h-[calc(100vh-6rem)] lg:min-h-[800px]">
         
         {/* TRUE BACKGROUND MAP */}
         <div className="absolute inset-0 z-0">
           {/* Overlay to darken map behind the text */}
           <div className="absolute inset-0 bg-slate-950/60 z-10 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/70 to-transparent z-10 pointer-events-none w-2/3" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/70 to-transparent z-10 pointer-events-none w-full lg:w-2/3" />
           
           <div className="h-full w-full grayscale-[0.3] pointer-events-none">
             <FloodMap sensors={simulatedSensors} />
@@ -136,36 +136,36 @@ export default function LoginPage() {
         </div>
 
         {/* LEFT SIDE: Hero Content */}
-        <div className="flex-1 p-8 lg:p-16 xl:p-24 relative z-20 flex flex-col justify-center pointer-events-none">
+        <div className="flex-1 p-4 sm:p-8 lg:p-16 xl:p-24 relative z-20 flex flex-col justify-center pointer-events-none">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-3 mb-12">
+            <div className="flex items-center gap-3 mb-6 sm:mb-12">
               <div className="h-px w-8 bg-orange-500" />
-              <span className="text-xs font-mono font-bold tracking-widest text-orange-500 uppercase drop-shadow-md">
+              <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-orange-500 uppercase drop-shadow-md">
                 Flash Flood Readiness Network &middot; India
               </span>
             </div>
 
-            <h1 className="text-6xl xl:text-8xl font-extrabold text-white tracking-tight leading-[1.05] mb-6 font-playfair drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-8xl font-extrabold text-white tracking-tight leading-[1.05] mb-4 sm:mb-6 font-playfair drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
               Stay ahead of <br />
               <span className="text-orange-500 drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]">the surge.</span>
             </h1>
 
-            <p className="text-lg text-slate-300 max-w-md leading-relaxed mb-16 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <p className="text-sm sm:text-lg text-slate-300 max-w-md leading-relaxed mb-8 sm:mb-16 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               Empowering citizens and first responders with real-time flood intelligence, safe evacuation routing, and instant crisis coordination.
             </p>
 
             {/* Bottom Stats Floating over map */}
-            <div className="flex flex-wrap items-center gap-8 mt-8 border-t border-white/20 pt-8 max-w-lg bg-slate-950/40 p-6 rounded-2xl backdrop-blur-sm border-l">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-8 mt-6 sm:mt-8 border-t border-white/20 pt-6 sm:pt-8 max-w-lg bg-slate-950/40 p-4 sm:p-6 rounded-2xl backdrop-blur-sm border-l">
               <div>
-                <div className="text-3xl font-bold text-white mb-1 drop-shadow-md">05</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1 drop-shadow-md">05</div>
                 <div className="text-[9px] font-mono tracking-widest uppercase text-slate-400 drop-shadow-md">Hill Sectors<br/>Connected</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-white mb-1 drop-shadow-md">24/7</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1 drop-shadow-md">24/7</div>
                 <div className="text-[9px] font-mono tracking-widest uppercase text-slate-400 drop-shadow-md">Warning Channel<br/>Watching</div>
               </div>
               <div className="flex items-center gap-3 ml-auto">
-                <ShieldCheck className="size-6 text-emerald-500 drop-shadow-md" />
+                <ShieldCheck className="size-5 sm:size-6 text-emerald-500 drop-shadow-md" />
                 <div className="text-[9px] font-mono tracking-widest uppercase text-emerald-400 font-bold drop-shadow-md">Encrypted Local Access<br/>For Response Teams</div>
               </div>
             </div>
@@ -173,9 +173,9 @@ export default function LoginPage() {
         </div>
 
         {/* RIGHT SIDE: Auth Form */}
-        <div className="w-full lg:w-[500px] xl:w-[600px] flex items-center justify-center p-6 lg:p-12 relative z-20">
-          <div className="w-full bg-slate-950/80 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-8 lg:p-10">
-            <div className="flex items-center gap-2 mb-8">
+        <div className="w-full lg:w-[500px] xl:w-[600px] flex items-center justify-center p-4 sm:p-6 lg:p-12 relative z-20">
+          <div className="w-full bg-slate-950/80 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-5 sm:p-8 lg:p-10">
+            <div className="flex items-center gap-2 mb-6 sm:mb-8">
               <span className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Secure Access Node</span>
               <div className="ml-auto flex items-center gap-1.5">
                 <Lock className="size-3 text-emerald-500" />
@@ -183,9 +183,9 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold text-white mb-8">Enter the network</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Enter the network</h2>
 
-            <div className="flex items-center border-b border-white/10 mb-8">
+            <div className="flex items-center border-b border-white/10 mb-6 sm:mb-8">
               <button onClick={() => setActiveTab("login")} className={cn("flex-1 pb-4 text-sm font-semibold transition-colors relative", activeTab === "login" ? "text-white" : "text-slate-500 hover:text-slate-300")}>
                 Log In
                 {activeTab === "login" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-500" />}
@@ -207,8 +207,8 @@ export default function LoginPage() {
                 <>
                   <div className="flex flex-col gap-2 mb-2">
                     <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500">Access Role</span>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button type="button" onClick={() => setRole("resident")} className={cn("flex flex-col gap-2 p-4 rounded-xl border text-left transition-all relative overflow-hidden", role === "resident" ? "bg-white/5 border-orange-500/50" : "bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/5")}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                      <button type="button" onClick={() => setRole("resident")} className={cn("flex flex-col gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-xl border text-left transition-all relative overflow-hidden", role === "resident" ? "bg-white/5 border-orange-500/50" : "bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/5")}>
                         <div className="flex items-center gap-2">
                           <User className={cn("size-4", role === "resident" ? "text-orange-500" : "text-slate-400")} />
                           <span className="text-sm font-semibold text-white">Resident</span>
@@ -216,7 +216,7 @@ export default function LoginPage() {
                         <p className="text-[10px] text-slate-400 leading-relaxed">Evacuation alerts, shelter routes, and local river updates.</p>
                       </button>
                       
-                      <button type="button" onClick={() => setRole("responder")} className={cn("flex flex-col gap-2 p-4 rounded-xl border text-left transition-all relative overflow-hidden", role === "responder" ? "bg-white/5 border-orange-500/50" : "bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/5")}>
+                      <button type="button" onClick={() => setRole("responder")} className={cn("flex flex-col gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-xl border text-left transition-all relative overflow-hidden", role === "responder" ? "bg-white/5 border-orange-500/50" : "bg-white/[0.02] border-white/5 hover:border-white/10 hover:bg-white/5")}>
                         <div className="flex items-center gap-2">
                           <Radio className={cn("size-4", role === "responder" ? "text-orange-500" : "text-slate-400")} />
                           <span className="text-sm font-semibold text-white">First Responder</span>
@@ -274,9 +274,9 @@ export default function LoginPage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-slate-950/95 backdrop-blur-xl border-t border-white/5 py-8 px-6 lg:px-12 relative z-40 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-8 text-[10px] font-mono tracking-widest uppercase text-slate-500">
+      <footer className="bg-slate-950/95 backdrop-blur-xl border-t border-white/5 py-6 sm:py-8 px-4 sm:px-6 lg:px-12 relative z-40 flex flex-col gap-5 sm:gap-6 safe-bottom">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+          <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-slate-500 text-center">
             <span>&copy; {new Date().getFullYear()} HillShield Systems</span>
             <a href="#" className="hover:text-slate-300 transition-colors">Privacy Protocol</a>
             <a href="#" className="hover:text-slate-300 transition-colors">Terms of Access</a>

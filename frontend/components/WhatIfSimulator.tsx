@@ -1,8 +1,8 @@
 import React from "react"
 import { useSimulation } from "@/components/simulation-provider"
-import { Droplets, Mountain, CloudRain, Waves, AlertTriangle, ShieldAlert } from "lucide-react"
+import { Droplets, Mountain, CloudRain, Waves, AlertTriangle, ShieldAlert, X } from "lucide-react"
 
-export function WhatIfSimulator() {
+export function WhatIfSimulator({ onClose }: { onClose?: () => void }) {
   const { rain, setRain, soil, setSoil, river, setRiver, isLiveOsiris } = useSimulation()
 
   // Calculate composite risk score
@@ -24,10 +24,21 @@ export function WhatIfSimulator() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0f18] text-white">
-      <div className="p-6 border-b border-white/5">
-        <h2 className="text-sm font-mono tracking-[0.2em] text-slate-400 uppercase">What-If Simulator</h2>
-        <p className="text-xs text-slate-500 mt-2">Adjust variables manually to simulate flood conditions.</p>
+    <div className="flex flex-col h-full w-full bg-[#0a0f18] text-white">
+      <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 sm:py-4 border-b border-white/5 shrink-0">
+        <div>
+          <h2 className="text-sm font-mono tracking-[0.2em] text-slate-400 uppercase">What-If Simulator</h2>
+          <p className="text-xs text-slate-500 mt-0.5">Adjust variables manually to simulate flood conditions.</p>
+        </div>
+        {onClose && (
+          <button 
+            onClick={onClose} 
+            className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors shrink-0"
+            aria-label="Close What-If Simulator"
+          >
+            <X className="size-5" />
+          </button>
+        )}
       </div>
 
       <div className="p-6 flex-1 overflow-y-auto space-y-8 relative">

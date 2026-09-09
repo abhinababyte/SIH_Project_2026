@@ -46,10 +46,10 @@ export default function SheltersPanel({ isOpen, onClose }: { isOpen: boolean, on
   ];
 
   return (
-    <div className="flex h-full w-[400px] flex-col overflow-hidden bg-[#0a101d] border-r border-white/5  shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+    <div className="flex h-full w-full max-w-full flex-col overflow-hidden bg-[#0a101d] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 shrink-0">
-        <h2 className="text-lg font-medium text-slate-200">Shelters & Routes</h2>
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 shrink-0 border-b border-white/5">
+        <h2 className="text-base sm:text-lg font-medium text-slate-200">Shelters & Routes</h2>
         <div className="flex items-center gap-2">
           <button className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
             <Search className="size-5" />

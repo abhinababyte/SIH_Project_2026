@@ -127,129 +127,132 @@ export default function TacticalCommandCenter() {
       {/* SLIDING PANELS */}
       <div 
         className={cn(
-          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute top-16 bottom-14 sm:bottom-16 left-0 w-full sm:w-[420px] z-[35] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           activePanel === "chat" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         )}
-        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
       >
         <CitizenSafetyChat isOpen={activePanel === "chat"} onClose={() => setActivePanel(null)} />
       </div>
 
       <div 
         className={cn(
-          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute top-16 bottom-14 sm:bottom-16 left-0 w-full sm:w-[420px] z-[35] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           activePanel === "shelters" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         )}
-        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
       >
         <SheltersPanel isOpen={activePanel === "shelters"} onClose={() => setActivePanel(null)} />
       </div>
 
       <div 
         className={cn(
-          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute top-16 bottom-14 sm:bottom-16 left-0 w-full sm:w-[420px] z-[35] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           activePanel === "incident" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         )}
-        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
       >
         <IncidentPanel isOpen={activePanel === "incident"} onClose={() => setActivePanel(null)} />
       </div>
 
       <div 
         className={cn(
-          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute top-16 bottom-14 sm:bottom-16 left-0 w-full sm:w-[420px] z-[35] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           activePanel === "report" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         )}
-        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
       >
         <ReportPanel isOpen={activePanel === "report"} onClose={() => setActivePanel(null)} />
       </div>
       
       <div 
         className={cn(
-          "absolute top-16 bottom-16 w-[calc(100vw-72px)] sm:w-[420px] z-[45] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute top-16 bottom-14 sm:bottom-16 left-0 w-full sm:w-[420px] z-[35] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           activePanel === "whatif" ? "translate-x-0 shadow-2xl opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"
         )}
-        style={{ left: isSidebarExpanded ? "320px" : "72px" }}
       >
-        <WhatIfSimulator />
+        <WhatIfSimulator onClose={() => setActivePanel(null)} />
       </div>
       
       {/* TOP HEADER BAR */}
       <header 
-        className="absolute top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between pr-6 pointer-events-auto"
+        className="absolute top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-2.5 sm:px-6 pointer-events-auto"
       >
-        <div className="flex items-center h-full">
-          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-4">
-              <img src="/HillShield.png" alt="HillShield Logo" className="h-12 w-auto object-contain" />
-            </div>
+        <div className="flex items-center h-full min-w-0">
+          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-2 sm:pr-4">
+            <img src="/HillShield.png" alt="HillShield Logo" className="h-9 sm:h-12 w-auto object-contain" />
+          </div>
           
-          <div className="pl-6 flex items-center gap-6">
-            <div>
-              <h1 className="text-sm font-bold text-orange-500 tracking-wide uppercase font-serif">HILLSHIELD: FAST RESPONDER</h1>
-            </div>
+          <div className="pl-2 sm:pl-4 flex items-center gap-1.5 sm:gap-4 min-w-0">
+            <h1 className="text-xs sm:text-sm font-bold text-orange-500 tracking-wide uppercase font-serif whitespace-nowrap">
+              <span className="hidden sm:inline">HILLSHIELD: </span><span>RESPONDER</span>
+            </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-5">
-             <button
-               onClick={toggleOsiris}
-               className={cn("px-3 py-1.5 rounded-full transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 border focus:outline-none",
-                 isLiveOsiris ? "bg-indigo-600/90 hover:bg-indigo-500 border-indigo-400 shadow-[0_0_12px_rgba(79,70,229,0.6)]" : "bg-slate-800 hover:bg-slate-700 border-slate-600"
-               )}
-             >
-               <CloudRain className="size-3" />
-               {isLiveOsiris ? "OSIRIS: LIVE" : "OSIRIS: OFF"}
-             </button>
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+           {/* OSIRIS Live Toggle */}
+           <button
+             onClick={toggleOsiris}
+             className={cn("px-2 sm:px-3 py-1 sm:py-1.5 rounded-full transition-colors text-white text-[9px] sm:text-[10px] font-mono tracking-wider font-bold uppercase flex items-center gap-1 sm:gap-1.5 border focus:outline-none shrink-0",
+               isLiveOsiris ? "bg-indigo-600/90 hover:bg-indigo-500 border-indigo-400 shadow-[0_0_12px_rgba(79,70,229,0.6)]" : "bg-slate-800 hover:bg-slate-700 border-slate-600"
+             )}
+             title={isLiveOsiris ? "OSIRIS Satellite Telemetry: LIVE" : "OSIRIS Satellite Telemetry: OFF"}
+           >
+             <CloudRain className="size-3" />
+             <span className="hidden xs:inline">OSIRIS: </span>{isLiveOsiris ? "LIVE" : "OFF"}
+           </button>
 
-             {/* SOS Button */}
+           {/* SOS Button */}
            <button 
              onClick={() => setIsSosOpen(!isSosOpen)}
-             className="px-3 py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none"
+             className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[9px] sm:text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-1 sm:gap-1.5 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none shrink-0"
            >
-             <Phone className="size-3" />
+             <Phone className="size-3 hidden sm:block" />
              SOS
            </button>
 
-           <div className="flex items-center gap-2">
-              <Radio className={cn("size-4", isConnected ? "text-emerald-400" : "text-rose-500")} />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300">
-                Uplink: {isConnected ? <span className="text-emerald-400 font-bold">SECURE</span> : <span className="text-rose-500 font-bold animate-pulse">OFFLINE</span>}
+           {/* Connection Uplink */}
+           <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 py-1 rounded bg-white/5 border border-white/5 shrink-0" title={isConnected ? "WebSocket Connected" : "WebSocket Disconnected"}>
+              <Radio className={cn("size-3 sm:size-3.5", isConnected ? "text-emerald-400" : "text-rose-500")} />
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-slate-300">
+                <span className="hidden md:inline">Uplink: </span>
+                {isConnected ? <span className="text-emerald-400 font-bold hidden xs:inline">SECURE</span> : <span className="text-rose-500 font-bold animate-pulse hidden xs:inline">OFFLINE</span>}
               </span>
            </div>
            
-           <div className="w-px h-4 bg-white/10" />
+           <div className="w-px h-4 bg-white/10 hidden md:block" />
            
-           <div className="flex items-center gap-2">
+           <div className="hidden md:flex items-center gap-2">
               <Activity className="size-4 text-neon-blue" />
               <span className="text-[11px] font-mono uppercase tracking-wider text-slate-300">
                 Sensors: <span className="text-neon-blue font-bold">14</span>
               </span>
            </div>
 
-           <div className="w-px h-6 bg-white/10" />
+           <div className="w-px h-6 bg-white/10 hidden md:block" />
 
+           {/* Alerts Notification */}
            <button 
              onClick={() => setIsAlertsOpen(!isAlertsOpen)}
-             className="relative flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors"
+             className="relative flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-slate-300 shrink-0"
+             aria-label="Alerts"
            >
-             <Bell className="size-5 text-slate-300" />
-             {isEmergency && <span className="absolute top-1.5 right-1.5 size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626] animate-pulse" />}
+             <Bell className="size-4 sm:size-5" />
+             {isEmergency && <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 size-2 sm:size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626] animate-pulse" />}
            </button>
 
-           <div className="relative">
+           {/* User Account */}
+           <div className="relative shrink-0">
              <button 
                onClick={() => setIsAccountOpen(!isAccountOpen)}
-               className="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner"
+               className="flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner text-slate-300 shrink-0"
+               aria-label="User Account"
              >
-               <User className="size-5 text-slate-300" />
+               <User className="size-4 sm:size-5" />
              </button>
 
              {/* Account Dropdown */}
              {isAccountOpen && (
                <>
                  <div className="fixed inset-0 z-40" onClick={() => setIsAccountOpen(false)} />
-                 <div className="absolute right-0 mt-2 w-56 rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
+                 <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-1.5rem)] rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
                    <div className="px-4 py-3 border-b border-white/5 bg-white/5">
                      <p className="text-sm font-medium text-white">{userName}</p>
                      <p className="text-xs text-slate-400">HQ Authorised User</p>
@@ -287,7 +290,7 @@ export default function TacticalCommandCenter() {
             className="fixed inset-0 z-30" 
             onClick={() => setIsAlertsOpen(false)} 
           />
-          <div className="absolute top-20 right-6 z-40 pointer-events-auto glass-panel w-[calc(100vw-48px)] sm:w-[420px] max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="absolute top-20 right-4 sm:right-6 z-40 pointer-events-auto glass-panel w-[calc(100vw-2rem)] sm:w-[420px] max-h-[80vh] sm:max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <AlertsFeed />
           </div>
         </>
@@ -300,7 +303,7 @@ export default function TacticalCommandCenter() {
             className="fixed inset-0 z-30" 
             onClick={() => setIsRiskOpen(false)} 
           />
-          <div className="absolute top-20 right-6 sm:right-[280px] z-40 pointer-events-auto glass-panel w-[calc(100vw-48px)] sm:w-[420px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="absolute top-20 right-4 sm:right-[280px] z-40 pointer-events-auto glass-panel w-[calc(100vw-2rem)] sm:w-[420px] max-h-[80vh] overflow-y-auto flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <RiskDetails rain={rain} soil={soil} river={river} severity={severity} selectedSensor={selectedSensor} />
           </div>
         </>
@@ -313,17 +316,17 @@ export default function TacticalCommandCenter() {
             className="fixed inset-0 z-30" 
             onClick={() => setIsSosOpen(false)} 
           />
-          <div className="absolute top-20 right-[350px] z-40 pointer-events-auto glass-panel w-[320px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="absolute top-20 right-4 sm:right-[350px] z-40 pointer-events-auto glass-panel w-[calc(100vw-2rem)] max-w-[320px] max-h-[80vh] overflow-y-auto flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <SosDetails />
           </div>
         </>
       )}
 
       {/* MAP LEGEND (BOTTOM RIGHT) */}
-      <div className="absolute bottom-20 right-6 z-30 pointer-events-auto glass-panel px-5 py-4 rounded-xl shadow-xl border border-white/10 flex flex-col gap-4">
+      <div className="hidden md:flex absolute bottom-20 right-6 z-30 pointer-events-auto glass-panel px-4 sm:px-5 py-3 sm:py-4 rounded-xl shadow-xl border border-white/10 flex-col gap-3 sm:gap-4 max-w-[calc(100vw-6rem)]">
         <h4 className="text-[10px] font-mono tracking-wider text-slate-400 uppercase border-b border-white/5 pb-2">Tactical Legend</h4>
         
-        <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-3 sm:gap-y-4">
           <div className="flex flex-col gap-2">
             <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Routes & Paths</span>
             <div className="flex items-center gap-2 text-[11px] text-slate-300">
@@ -356,15 +359,15 @@ export default function TacticalCommandCenter() {
       </div>
 
       {/* FOOTER */}
-      <footer className="absolute bottom-0 left-0 right-0 h-16 z-50 bg-slate-950/95 backdrop-blur-xl border-t border-white/5 px-6 lg:px-12 flex items-center justify-between pointer-events-auto shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-wrap items-center gap-4 md:gap-8 text-[10px] font-mono tracking-widest uppercase text-slate-500">
+      <footer className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 z-[55] bg-slate-950/98 backdrop-blur-xl border-t border-white/5 px-4 sm:px-6 lg:px-12 flex items-center justify-between pointer-events-auto shadow-[0_-4px_24px_rgba(0,0,0,0.5)] safe-bottom">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-slate-500">
           <span>&copy; {new Date().getFullYear()} HILLSHIELD SYSTEMS</span>
           <a href="#" className="hover:text-slate-300 transition-colors">Privacy Protocol</a>
           <a href="#" className="hover:text-slate-300 transition-colors">Terms of Access</a>
         </div>
         
         <div className="text-[10px] font-mono tracking-wider text-slate-500 flex items-center">
-          <span className="flex items-center gap-1.5 text-slate-400">
+          <span className="flex items-center gap-1.5 text-slate-400 text-center">
             Created with <span className="text-rose-500 text-sm">♥</span> by <strong className="text-orange-500 font-bold tracking-widest">Codex Gigas</strong> for India
           </span>
         </div>

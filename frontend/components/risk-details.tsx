@@ -3,14 +3,14 @@ import React, { useState } from "react"
 import { Loader2, BrainCircuit } from "lucide-react"
 import { Droplets, Thermometer, Waves, ShieldAlert, Activity, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { type Sensor } from "@/lib/flood-data"
+import { type Sensor, type Severity } from "@/lib/flood-data"
 import { API_BASE } from "@/lib/api"
 
 interface RiskDetailsProps {
   rain: number
   soil: number
   river: number
-  severity: "normal" | "warning" | "danger"
+  severity: Severity | "normal"
   selectedSensor?: Sensor | null
 }
 

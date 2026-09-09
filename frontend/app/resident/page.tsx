@@ -161,24 +161,24 @@ export default function ResidentDashboard() {
       `}} />
 
       {/* TOP HEADER BAR */}
-      <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between pr-6 pointer-events-auto">
-        <div className="flex items-center h-full">
-          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-4">
-              <img src="/HillShield.png" alt="HillShield Logo" className="h-12 w-auto object-contain" />
-            </div>
+      <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-[#0E1626]/90 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-2.5 sm:px-6 pointer-events-auto">
+        <div className="flex items-center h-full min-w-0">
+          <div className="h-16 w-auto shrink-0 flex items-center justify-center border-r border-white/5 pr-2 sm:pr-4">
+            <img src="/HillShield.png" alt="HillShield Logo" className="h-9 sm:h-12 w-auto object-contain" />
+          </div>
           
-          <div className="pl-6 flex items-center gap-6">
-            <div>
-              <h1 className="text-sm font-bold text-emerald-500 tracking-wide uppercase font-serif">HILLSHIELD: RESIDENT</h1>
-            </div>
+          <div className="pl-2 sm:pl-4 flex items-center gap-1.5 sm:gap-4 min-w-0">
+            <h1 className="text-xs sm:text-sm font-bold text-emerald-500 tracking-wide uppercase font-serif whitespace-nowrap">
+              <span className="hidden sm:inline">HILLSHIELD: </span><span>RESIDENT</span>
+            </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
            {/* SOS Button */}
            <button 
              onClick={() => setIsSosOpen(!isSosOpen)}
-             className="px-3 py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-2 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none"
+             className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-rose-600/90 hover:bg-rose-500 transition-colors text-white text-[9px] sm:text-[10px] font-mono tracking-widest font-bold uppercase flex items-center gap-1 sm:gap-1.5 shadow-[0_0_12px_rgba(225,29,72,0.6)] border border-rose-400 focus:outline-none shrink-0"
            >
              <Phone className="size-3 hidden sm:block" />
              SOS
@@ -187,13 +187,13 @@ export default function ResidentDashboard() {
            {/* Simulate Danger Button */}
            <button 
              onClick={() => setSurvivalMode(true)}
-             className="px-3 py-1.5 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 text-[10px] font-mono tracking-widest font-bold uppercase transition-colors flex items-center gap-2"
+             className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 text-[9px] sm:text-[10px] font-mono tracking-wider font-bold uppercase transition-colors flex items-center gap-1 sm:gap-1.5 shrink-0"
            >
              <ShieldAlert className="size-3 hidden sm:block" />
-             SIMULATE DANGER
+             <span className="hidden sm:inline">SIMULATE </span>DANGER
            </button>
            
-           <div className="w-px h-6 bg-white/10 mx-2 hidden sm:block" />
+           <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" />
 
            {/* Metrics */}
            <div className="hidden md:flex items-center gap-2">
@@ -217,26 +217,28 @@ export default function ResidentDashboard() {
            {/* Notification Bell */}
            <button 
              onClick={() => setIsAlertsOpen(!isAlertsOpen)}
-             className="relative flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors"
+             className="relative flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors text-slate-300 shrink-0"
+             aria-label="Alerts"
            >
-             <Bell className="size-5 text-slate-300" />
-             <span className="absolute top-1.5 right-1.5 size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626]" />
+             <Bell className="size-4 sm:size-5" />
+             <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 size-2 sm:size-2.5 rounded-full bg-rose-500 ring-2 ring-[#0E1626]" />
            </button>
 
            {/* Account Dropdown */}
-           <div className="relative">
+           <div className="relative shrink-0">
              <button 
                onClick={() => setIsAccountOpen(!isAccountOpen)}
-               className="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner"
+               className="flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-white/10 transition-colors border border-white/10 bg-slate-900 shadow-inner text-slate-300 shrink-0"
+               aria-label="User Account"
              >
-               <User className="size-5 text-slate-300" />
+               <User className="size-4 sm:size-5" />
              </button>
 
              {/* Dropdown Content */}
              {isAccountOpen && (
                <>
                  <div className="fixed inset-0 z-40" onClick={() => setIsAccountOpen(false)} />
-                 <div className="absolute right-0 mt-12 w-56 rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
+                 <div className="absolute right-0 mt-2 sm:mt-12 w-56 max-w-[calc(100vw-1.5rem)] rounded-xl border border-white/10 bg-[#0E1626] shadow-xl z-50 overflow-hidden">
                    <div className="px-4 py-3 border-b border-white/5 bg-white/5">
                      <p className="text-sm font-medium text-white">{userName}</p>
                      <p className="text-xs text-slate-400">ID: R-402</p>
@@ -297,7 +299,7 @@ export default function ResidentDashboard() {
       {isAlertsOpen && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setIsAlertsOpen(false)} />
-          <div className="fixed top-28 right-20 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[420px] max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="fixed top-24 sm:top-28 right-4 sm:right-20 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[calc(100vw-2rem)] max-w-[420px] max-h-[80vh] sm:max-h-[600px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <AlertsFeed userType="resident" />
           </div>
         </>
@@ -307,19 +309,19 @@ export default function ResidentDashboard() {
       {isSosOpen && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setIsSosOpen(false)} />
-          <div className="fixed top-28 right-6 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[320px] flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-6">
+          <div className="fixed top-24 sm:top-28 right-4 sm:right-6 z-40 bg-[#0E1626]/95 backdrop-blur-xl border border-white/10 w-[calc(100vw-2rem)] max-w-[320px] max-h-[80vh] overflow-y-auto flex flex-col rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200 p-4 sm:p-6">
             <SosDetails userType="resident" />
           </div>
         </>
       )}
 
       {/* 1. HERO SECTION */}
-      <section className="relative px-6 pt-8 pb-12 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+      <section className="relative px-4 sm:px-6 pt-6 sm:pt-8 pb-8 sm:pb-12 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
         {/* Background radial gradient */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-900/10 rounded-full blur-3xl -z-10 pointer-events-none" />
         
-        <div className="flex-1 space-y-8 z-10">
-          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-6 flex items-center gap-2">
+        <div className="flex-1 space-y-6 sm:space-y-8 z-10">
+          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-4 sm:mb-6 flex items-center gap-2">
             <span className="relative flex size-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
@@ -327,16 +329,16 @@ export default function ResidentDashboard() {
             Live • Resident Safety Portal
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-serif text-white tracking-tight leading-[1.1]">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif text-white tracking-tight leading-[1.1]">
             Your Community's <span className="italic text-slate-400">Shield</span><br/>
             Against the Storm.
           </h1>
           
-          <p className="text-lg text-slate-400 max-w-xl leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed">
             Real-time flood alerts, active evacuation routes, and immediate shelter guidance tailored specifically to your village and elevation.
           </p>
           
-          <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 pt-4">
+          <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 pt-2 sm:pt-4">
             <button 
               onClick={() => document.getElementById('shelters-section')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-4 py-2.5 text-sm bg-[#e8e4dc] hover:bg-white text-slate-900 font-semibold rounded-full transition-colors whitespace-nowrap"
@@ -366,7 +368,7 @@ export default function ResidentDashboard() {
         </div>
 
         {/* Hero Status Card */}
-        <div className="w-full lg:w-[540px] bg-[#121923] border border-white/5 rounded-3xl p-6 shadow-2xl relative overflow-hidden z-10 flex flex-col gap-6">
+        <div className="w-full lg:w-[540px] bg-[#121923] border border-white/5 rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden z-10 flex flex-col gap-6">
           
           {/* Header & Level */}
           <div className="flex items-start justify-between">
@@ -499,9 +501,9 @@ export default function ResidentDashboard() {
           <p className="text-slate-400 mt-2">Live telemetry from remote rainfall gauges and soil-moisture probes. Updated every 10 seconds.</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {/* Composite Risk Gauge */}
-            <div className={`border rounded-3xl p-8 flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-1000 ${getBgStyle(compositeSev)}`}>
+            <div className={`border rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-1000 ${getBgStyle(compositeSev)}`}>
               {/* Concentric rings background */}
               <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
                 <div className="w-[150%] aspect-square rounded-full border border-white/20 scale-75"></div>
@@ -510,77 +512,77 @@ export default function ResidentDashboard() {
               </div>
   
               <div className="text-sm text-slate-400 font-mono tracking-widest font-bold uppercase mb-1 z-10">Composite Risk Index</div>
-              <div className="text-[10px] text-slate-500 font-mono tracking-widest uppercase mb-6 z-10 opacity-70 bg-black/20 px-2 py-1 rounded">LOC: 30°42'N 78°27'E</div>
+              <div className="text-[10px] text-slate-500 font-mono tracking-widest uppercase mb-4 sm:mb-6 z-10 opacity-70 bg-black/20 px-2 py-1 rounded">LOC: 30°42'N 78°27'E</div>
               
               {/* CSS Circular Gauge */}
-              <div className="relative size-48 flex items-center justify-center z-10">
-                <svg className="absolute inset-0 size-full transform -rotate-90">
+              <div className="relative size-40 sm:size-48 flex items-center justify-center z-10">
+                <svg viewBox="0 0 192 192" className="absolute inset-0 size-full transform -rotate-90">
                   <circle cx="96" cy="96" r="80" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-800" />
                   <circle cx="96" cy="96" r="80" fill="none" stroke="currentColor" strokeWidth="12" strokeDasharray="502" strokeDashoffset={502 - (502 * (compositeIndex / 100))} strokeLinecap="round" className={`transition-all duration-1000 ${getTextColor(compositeSev)}`} />
                 </svg>
                 <div className="text-center">
-                  <div className={`text-5xl font-serif ${getTextColor(compositeSev)}`}>{compositeIndex}</div>
+                  <div className={`text-4xl sm:text-5xl font-serif ${getTextColor(compositeSev)}`}>{compositeIndex}</div>
                   <div className="text-[10px] text-slate-500 font-mono uppercase tracking-widest mt-1">Risk Index</div>
                 </div>
               </div>
   
-              <div className="mt-8 text-sm text-slate-400 z-10 text-center">
+              <div className="mt-6 sm:mt-8 text-sm text-slate-400 z-10 text-center">
                 Storm intensity <span className="text-white font-bold">{Math.min(100, Math.round(rain * 2.5))}%</span>
-                <p className="mt-3 text-xs text-slate-500 leading-relaxed max-w-[200px] mx-auto hidden sm:block">
+                <p className="mt-2 sm:mt-3 text-xs text-slate-500 leading-relaxed max-w-[200px] mx-auto hidden sm:block">
                   Aggregated in real-time from local AI models and ground telemetry.
                 </p>
               </div>
             </div>
 
           {/* 4-Card Grid */}
-          <div className="md:col-span-2 grid grid-cols-2 gap-4">
-            <div className={`p-6 rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(rainSev)}`}>
+          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(rainSev)}`}>
               <div className="flex items-start justify-between">
-                <div className={`text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(rainSev)} opacity-80`}>Rainfall</div>
+                <div className={`text-xs sm:text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(rainSev)} opacity-80`}>Rainfall</div>
                 <CloudRain className={`size-4 ${getTextColor(rainSev)} opacity-60`} />
               </div>
-              <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(rainSev)}`}>{Number(rain).toFixed(2)} <span className="text-sm font-sans opacity-70">mm/hr</span></div>
-                <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(rainSev)} opacity-70`}>
+              <div className="mt-4 sm:mt-8">
+                <div className={`text-3xl sm:text-4xl font-serif ${getTextColor(rainSev)}`}>{Number(rain).toFixed(2)} <span className="text-xs sm:text-sm font-sans opacity-70">mm/hr</span></div>
+                <p className={`mt-2 sm:mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(rainSev)} opacity-70`}>
                   {rainSev === "danger" ? "Extreme downpour. Ground absorption halted. Immediate flash flood risk." : rainSev === "watch" ? "Steady downpour. Ground absorption is slowing down. Expected to continue." : "Light rain. Natural drainage systems are functioning normally."}
                 </p>
               </div>
             </div>
             
-            <div className={`p-6 rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(soilSev)}`}>
+            <div className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(soilSev)}`}>
               <div className="flex items-start justify-between">
-                <div className={`text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(soilSev)} opacity-80`}>Soil Moisture</div>
+                <div className={`text-xs sm:text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(soilSev)} opacity-80`}>Soil Moisture</div>
                 <Droplets className={`size-4 ${getTextColor(soilSev)} opacity-60`} />
               </div>
-              <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(soilSev)}`}>{Number(soil).toFixed(2)}<span className="text-xl font-sans ml-1 opacity-70">%</span></div>
-                <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(soilSev)} opacity-70`}>
+              <div className="mt-4 sm:mt-8">
+                <div className={`text-3xl sm:text-4xl font-serif ${getTextColor(soilSev)}`}>{Number(soil).toFixed(2)}<span className="text-lg sm:text-xl font-sans ml-1 opacity-70">%</span></div>
+                <p className={`mt-2 sm:mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(soilSev)} opacity-70`}>
                   {soilSev === "danger" ? "Critical saturation. Mudslides likely in steep areas. Avoid slopes." : soilSev === "watch" ? "Ground is heavily saturated. Approaching critical threshold for potential landslides." : "Optimal soil absorption levels. No immediate landslide threat."}
                 </p>
               </div>
             </div>
 
-            <div className={`p-6 rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(slopeSev)}`}>
+            <div className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(slopeSev)}`}>
               <div className="flex items-start justify-between">
-                <div className={`text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(slopeSev)} opacity-80`}>Slope Stability</div>
+                <div className={`text-xs sm:text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(slopeSev)} opacity-80`}>Slope Stability</div>
                 <Mountain className={`size-4 ${getTextColor(slopeSev)} opacity-60`} />
               </div>
-              <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(slopeSev)}`}>{slopeStability}<span className="text-sm font-sans ml-1 opacity-70">/ 100</span></div>
-                <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(slopeSev)} opacity-70`}>
+              <div className="mt-4 sm:mt-8">
+                <div className={`text-3xl sm:text-4xl font-serif ${getTextColor(slopeSev)}`}>{slopeStability}<span className="text-xs sm:text-sm font-sans ml-1 opacity-70">/ 100</span></div>
+                <p className={`mt-2 sm:mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(slopeSev)} opacity-70`}>
                   {slopeSev === "danger" ? "Critical instability. Active soil displacement detected in sectors 4 and 7." : slopeSev === "watch" ? "Moderate risk. Minor soil stress detected. Actively monitoring." : "Stable bedrock and soil structure. No displacement detected."}
                 </p>
               </div>
             </div>
 
-            <div className={`p-6 rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(leadSev)}`}>
+            <div className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col justify-between transition-colors duration-1000 ${getBgStyle(leadSev)}`}>
               <div className="flex items-start justify-between">
-                <div className={`text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(leadSev)} opacity-80`}>Lead Time</div>
+                <div className={`text-xs sm:text-sm font-bold font-mono tracking-widest uppercase ${getTextColor(leadSev)} opacity-80`}>Lead Time</div>
                 <Activity className={`size-4 ${getTextColor(leadSev)} opacity-60`} />
               </div>
-              <div className="mt-8">
-                <div className={`text-4xl font-serif ${getTextColor(leadSev)}`}>{leadTime} <span className="text-sm font-sans opacity-70">minutes</span></div>
-                <p className={`mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(leadSev)} opacity-70`}>
+              <div className="mt-4 sm:mt-8">
+                <div className={`text-3xl sm:text-4xl font-serif ${getTextColor(leadSev)}`}>{leadTime} <span className="text-xs sm:text-sm font-sans opacity-70">minutes</span></div>
+                <p className={`mt-2 sm:mt-3 text-xs leading-relaxed hidden sm:block ${getTextColor(leadSev)} opacity-70`}>
                   {leadSev === "danger" ? "Imminent threat window. Prepare for immediate evacuation of low-lying areas." : leadSev === "watch" ? "Estimated window before critical flood levels are reached at the primary river basin." : "Sufficient time to secure property if conditions worsen."}
                 </p>
               </div>
@@ -723,7 +725,7 @@ export default function ResidentDashboard() {
                   0.8 km away • 12 min walk
                 </p>
                 
-                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-5 border-y border-white/5 py-3 sm:py-4">
                   <div>
                     <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
                     <div className="text-lg font-bold text-slate-200">12</div>
@@ -779,7 +781,7 @@ export default function ResidentDashboard() {
                   1.2 km away • 18 min walk
                 </p>
                 
-                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-5 border-y border-white/5 py-3 sm:py-4">
                   <div>
                     <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
                     <div className="text-lg font-bold text-slate-200">18</div>
@@ -835,7 +837,7 @@ export default function ResidentDashboard() {
                   0.3 km away • Not accepting evacuees
                 </p>
                 
-                <div className="grid grid-cols-4 gap-4 mb-5 border-y border-white/5 py-4 opacity-75">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-5 border-y border-white/5 py-3 sm:py-4 opacity-75">
                   <div>
                     <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-1 font-mono">Men</div>
                     <div className="text-lg font-bold text-slate-200">8</div>
@@ -884,30 +886,30 @@ export default function ResidentDashboard() {
       </section>
 
       {/* Persistent Ask AI Floating Button */}
-      <div className="fixed bottom-24 right-6 z-50 flex flex-col items-end gap-4">
+      <div className="fixed bottom-20 sm:bottom-24 right-4 sm:right-6 z-50 flex flex-col items-end gap-3 sm:gap-4">
         {isAiChatOpen && (
-          <div className="w-[350px] shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-[#0E1626]">
+          <div className="w-[calc(100vw-2rem)] sm:w-[350px] shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-[#0E1626]">
             <CitizenSafetyChat isOpen={isAiChatOpen} onClose={() => setIsAiChatOpen(false)} userType="resident" />
           </div>
         )}
         <button 
           onClick={() => setIsAiChatOpen(!isAiChatOpen)}
-          className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 p-4 rounded-full shadow-lg flex items-center gap-2 font-bold transition-transform hover:scale-105"
+          className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 p-3 sm:p-4 rounded-full shadow-lg flex items-center gap-2 font-bold transition-transform hover:scale-105"
         >
-          <MessageCircle className="size-6" />
-          {!isAiChatOpen && <span>Shield AI</span>}
+          <MessageCircle className="size-5 sm:size-6" />
+          {!isAiChatOpen && <span className="text-xs sm:text-sm">Shield AI</span>}
         </button>
       </div>
 
-      <footer className="w-full bg-[#0a0f18]/95 backdrop-blur-xl border-t border-white/5 px-6 lg:px-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-12 z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] font-mono tracking-widest uppercase text-slate-500">
+      <footer className="w-full bg-[#0a0f18]/95 backdrop-blur-xl border-t border-white/5 px-4 sm:px-6 lg:px-12 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-12 z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)] safe-bottom">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-8 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-slate-500">
           <span>&copy; {new Date().getFullYear()} HillShield Systems</span>
           <a href="#" className="hover:text-slate-300 transition-colors">Privacy Protocol</a>
           <a href="#" className="hover:text-slate-300 transition-colors">Terms of Access</a>
         </div>
         
         <div className="text-[10px] font-mono tracking-wider text-slate-500 flex items-center">
-          <span className="flex items-center gap-1.5 text-slate-400">
+          <span className="flex items-center gap-1.5 text-slate-400 text-center">
             Created with <span className="text-rose-500 text-sm">❤️</span> by <strong className="text-emerald-500 font-bold tracking-widest">Codex Gigas</strong> for India
           </span>
         </div>

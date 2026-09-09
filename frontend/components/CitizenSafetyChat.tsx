@@ -143,16 +143,16 @@ export default function CitizenSafetyChat({ isOpen, onClose, userType = "respond
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-[#0a101d] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 shrink-0 border-b border-white/5">
-        <h2 className="text-base font-medium text-slate-200 flex items-center gap-2">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 shrink-0 border-b border-white/5">
+        <h2 className="text-sm sm:text-base font-medium text-slate-200 flex items-center gap-2">
           <ShieldAlert className={`size-4 ${userType === 'resident' ? 'text-emerald-500' : 'text-orange-500'}`}/>
           {userType === "resident" ? "Shield AI" : "Tactical AI Assist"}
         </h2>
         <div className="flex items-center gap-1">
-          <button className="p-1.5 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+          <button className="p-1.5 rounded-full hover:bg-white/5 text-slate-400 transition-colors" aria-label="Chat history">
             <History className="size-4" />
           </button>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/5 text-slate-400 transition-colors" aria-label="Close chat">
             <X className="size-4" />
           </button>
         </div>
@@ -161,9 +161,9 @@ export default function CitizenSafetyChat({ isOpen, onClose, userType = "respond
       {/* Chat Area */}
       <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col relative">
         {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col px-4 pt-8 pb-4">
-            <div className="text-center mb-6">
-              <h1 className={`text-xl font-semibold mb-2 ${userType === 'resident' ? 'text-emerald-400' : 'text-orange-400'}`}>
+          <div className="flex-1 flex flex-col px-3 sm:px-4 pt-6 sm:pt-8 pb-4">
+            <div className="text-center mb-4 sm:mb-6">
+              <h1 className={`text-lg sm:text-xl font-semibold mb-1.5 sm:mb-2 ${userType === 'resident' ? 'text-emerald-400' : 'text-orange-400'}`}>
                 {userType === "resident" ? "HillShield AI Assistant" : "HQ Command Assistant"}
               </h1>
               <p className="text-slate-400 text-xs px-2">
@@ -173,23 +173,23 @@ export default function CitizenSafetyChat({ isOpen, onClose, userType = "respond
               </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-2 mt-auto">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 mt-auto">
               {quickActions.map((action, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(action.label)}
-                  className="text-left bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 rounded-xl p-3 transition-colors flex flex-col gap-2"
+                  className="text-left bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 rounded-xl p-2.5 sm:p-3 transition-colors flex flex-col gap-1.5 sm:gap-2"
                 >
                   <div className={userType === 'resident' ? "text-emerald-400/80" : "text-orange-400/80"}>
                     {action.icon}
                   </div>
-                  <span className="text-[11px] text-slate-300 leading-snug">{action.label}</span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-300 leading-snug">{action.label}</span>
                 </button>
               ))}
             </div>
           </div>
         ) : (
-          <div className="flex-1 px-4 py-4 space-y-4">
+          <div className="flex-1 px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-4">
             {messages.map((msg) => (
               <div key={msg.id} className={cn("flex flex-col max-w-[85%]", msg.role === "user" ? "ml-auto items-end" : "mr-auto items-start")}>
                 <div className={cn(
@@ -235,7 +235,7 @@ export default function CitizenSafetyChat({ isOpen, onClose, userType = "respond
       </div>
 
       {/* Input Box */}
-      <div className="p-4 pt-2 shrink-0 bg-[#0a101d]">
+      <div className="p-3 sm:p-4 pt-2 shrink-0 bg-[#0a101d]">
         <div className="relative flex items-center bg-white/[0.03] border border-white/10 rounded-2xl p-1.5 focus-within:bg-white/[0.05] focus-within:border-white/20 transition-colors">
           <form onSubmit={handleSubmit} className="flex flex-1 items-center">
             <input

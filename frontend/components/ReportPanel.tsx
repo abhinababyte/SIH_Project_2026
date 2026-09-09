@@ -85,15 +85,15 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
   };
 
   return (
-    <div className="flex h-full w-[400px] flex-col overflow-hidden bg-[#0a101d] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+    <div className="flex h-full w-full max-w-full flex-col overflow-hidden bg-[#0a101d] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 shrink-0 border-b border-white/5">
-        <div className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded-xl bg-rose-500/10 border border-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
-            <Helicopter className="size-4 text-rose-500" />
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 shrink-0 border-b border-white/5">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex size-7 sm:size-8 items-center justify-center rounded-xl bg-rose-500/10 border border-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.15)] shrink-0">
+            <Helicopter className="size-3.5 sm:size-4 text-rose-500" />
           </div>
           <div>
-            <h2 className="text-lg font-medium text-slate-200">Resource Escalation</h2>
+            <h2 className="text-base sm:text-lg font-medium text-slate-200">Resource Escalation</h2>
           </div>
         </div>
         <button onClick={onClose} className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
