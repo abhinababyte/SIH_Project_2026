@@ -1,72 +1,82 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect, useMemo } from "react"
-import { AlertTriangle, Bell, MapPin, Globe } from "lucide-react"
-import { ALERTS, timeAgo, type Severity } from "@/lib/flood-data"
-import {
-  SeverityBadge,
-  severityText,
-} from "@/components/severity-badge"
-import { cn } from "@/lib/utils"
-import { API_BASE } from "@/lib/api"
+import { AlertTriangle, Bell, Globe, MapPin } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+import { SeverityBadge, severityText } from "@/components/severity-badge";
+import { API_BASE } from "@/lib/api";
+import { ALERTS, type Severity, timeAgo } from "@/lib/flood-data";
+import { cn } from "@/lib/utils";
 
 export function AlertsFeed({ userType = "responder" }: { userType?: "resident" | "responder" }) {
   const [language, setLanguage] = useState<"en" | "hi" | "bn">("en");
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [isTranslating, setIsTranslating] = useState(false);
 
-  const sorted = useMemo(() => [...ALERTS].sort((a, b) => a.issuedMinsAgo - b.issuedMinsAgo), [])
+  const sorted = useMemo(() => [...ALERTS].sort((a, b) => a.issuedMinsAgo - b.issuedMinsAgo), []);
 
   // Custom mock alerts for the resident view
-  const residentAlerts = useMemo(() => [
-    {
-      id: "r1",
-      title: "New Safe Shelter Opened",
-      body: "Govt. School (North Wing) is now open and accepting evacuees. Capacity currently at 30%.",
-      area: "North Sector",
-      issuedMinsAgo: 5,
-      severity: "safe" as Severity,
-    },
-    {
-      id: "r2",
-      title: "Route Blocked: River Road",
-      body: "Community verified: Bridge washout at River Road. DO NOT use this route.",
-      area: "River Road",
-      issuedMinsAgo: 12,
-      severity: "warning" as Severity,
-    },
-    {
-      id: "r3",
-      title: "Flash Flood Warning Upgraded",
-      body: "Water levels rising rapidly in the Lower Basin. Prepare for immediate evacuation.",
-      area: "Lower Basin",
-      issuedMinsAgo: 24,
-      severity: "danger" as Severity,
-    }
-  ], []);
+  const residentAlerts = useMemo(
+    () => [
+      {
+        id: "r1",
+        title: "New Safe Shelter Opened",
+        body: "Govt. School (North Wing) is now open and accepting evacuees. Capacity currently at 30%.",
+        area: "North Sector",
+        issuedMinsAgo: 5,
+        severity: "safe" as Severity,
+      },
+      {
+        id: "r2",
+        title: "Route Blocked: River Road",
+        body: "Community verified: Bridge washout at River Road. DO NOT use this route.",
+        area: "River Road",
+        issuedMinsAgo: 12,
+        severity: "warning" as Severity,
+      },
+      {
+        id: "r3",
+        title: "Flash Flood Warning Upgraded",
+        body: "Water levels rising rapidly in the Lower Basin. Prepare for immediate evacuation.",
+        area: "Lower Basin",
+        issuedMinsAgo: 24,
+        severity: "danger" as Severity,
+      },
+    ],
+    [],
+  );
 
-  const activeAlerts = useMemo(() => userType === "resident" ? residentAlerts : sorted, [userType, residentAlerts, sorted]);
+  const activeAlerts = useMemo(
+    () => (userType === "resident" ? residentAlerts : sorted),
+    [userType, residentAlerts, sorted],
+  );
 
   // Bhashini API Translation fetch
   useEffect(() => {
     if (language === "en") return;
-    
+
     setIsTranslating(true);
-    
+
     // We fetch translations for all visible titles and bodies
-    const textsToTranslate = activeAlerts.flatMap(a => [a.title, a.body, a.area, "Community Alerts"]);
-    
-    Promise.all(textsToTranslate.map(text => 
-      fetch(`${API_BASE}/api/bhashini/translate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, target_language: language })
-      })
-      .then(r => r.json())
-      .catch(e => ({ original_text: text, translated_text: text }))
-    )).then(results => {
+    const textsToTranslate = activeAlerts.flatMap((a) => [
+      a.title,
+      a.body,
+      a.area,
+      "Community Alerts",
+    ]);
+
+    Promise.all(
+      textsToTranslate.map((text) =>
+        fetch(`${API_BASE}/api/bhashini/translate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text, target_language: language }),
+        })
+          .then((r) => r.json())
+          .catch((e) => ({ original_text: text, translated_text: text })),
+      ),
+    ).then((results) => {
       const newTranslations: Record<string, string> = {};
-      results.forEach(res => {
+      results.forEach((res) => {
         if (res.original_text) {
           newTranslations[res.original_text] = res.translated_text;
         }
@@ -91,11 +101,16 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
             {activeAlerts.length}
           </span>
         </div>
-        
+
         {/* Bhashini Translation Dropdown */}
         {userType === "resident" && (
           <div className="flex items-center gap-2">
-            <Globe className={cn("size-3", isTranslating ? "text-amber-500 animate-spin" : "text-slate-400")} />
+            <Globe
+              className={cn(
+                "size-3",
+                isTranslating ? "text-amber-500 animate-spin" : "text-slate-400",
+              )}
+            />
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
@@ -112,44 +127,51 @@ export function AlertsFeed({ userType = "responder" }: { userType?: "resident" |
       <div className="space-y-6 overflow-y-auto pr-2 no-scrollbar flex-1 relative">
         {isTranslating && (
           <div className="absolute inset-0 z-10 bg-[#0E1626]/50 backdrop-blur-[1px] flex items-center justify-center rounded-xl">
-             <div className="bg-black/80 text-white font-mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 shadow-xl flex items-center gap-2">
-               <span className="size-2 rounded-full bg-amber-500 animate-ping" />
-               Translating via Bhashini API...
-             </div>
+            <div className="bg-black/80 text-white font-mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 shadow-xl flex items-center gap-2">
+              <span className="size-2 rounded-full bg-amber-500 animate-ping" />
+              Translating via Bhashini API...
+            </div>
           </div>
         )}
-        
+
         {activeAlerts.map((a) => (
-          <div
-            key={a.id}
-            className="linear-card p-4 transition-all duration-300 group"
-          >
+          <div key={a.id} className="linear-card p-4 transition-all duration-300 group">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3">
                 <div className="mt-1 flex size-6 shrink-0 items-center justify-center rounded-md bg-white/5 border border-white/10">
-                   <AlertTriangle className={cn("size-3.5", severityText[a.severity])} />
+                  <AlertTriangle className={cn("size-3.5", severityText[a.severity])} />
                 </div>
                 <div>
-                   <h3 className="text-sm font-semibold tracking-tight text-[#EDEDEF] leading-snug group-hover:text-white transition-colors">{t(a.title)}</h3>
-                   <p className="text-xs text-[#8A8F98] mt-1.5 leading-relaxed font-normal">{t(a.body)}</p>
+                  <h3 className="text-sm font-semibold tracking-tight text-[#EDEDEF] leading-snug group-hover:text-white transition-colors">
+                    {t(a.title)}
+                  </h3>
+                  <p className="text-xs text-[#8A8F98] mt-1.5 leading-relaxed font-normal">
+                    {t(a.body)}
+                  </p>
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.04]">
               <div className="flex items-center gap-3 text-[10px] linear-label linear-text-muted min-w-0">
                 <span className="flex items-center gap-1 truncate">
                   <MapPin className="size-3 shrink-0" />
                   <span className="truncate">{t(a.area)}</span>
                 </span>
-                <span aria-hidden className="shrink-0">•</span>
+                <span aria-hidden className="shrink-0">
+                  •
+                </span>
                 <span className="shrink-0 whitespace-nowrap">{timeAgo(a.issuedMinsAgo)}</span>
               </div>
-              <SeverityBadge severity={a.severity} showDot={true} className="scale-90 origin-right border border-white/5 bg-white/5 shrink-0" />
+              <SeverityBadge
+                severity={a.severity}
+                showDot={true}
+                className="scale-90 origin-right border border-white/5 bg-white/5 shrink-0"
+              />
             </div>
           </div>
         ))}
       </div>
     </section>
-  )
+  );
 }

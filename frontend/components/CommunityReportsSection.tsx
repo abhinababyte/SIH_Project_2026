@@ -1,14 +1,43 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Mountain, Droplets, AlertTriangle, Activity, ShieldAlert, User, MapPin } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  Droplets,
+  MapPin,
+  Mountain,
+  ShieldAlert,
+  User,
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { API_BASE } from "@/lib/api";
 
 const HAZARD_TYPES = [
-  { value: "Landslide", label: "Landslide", icon: Mountain, activeClasses: "bg-rose-500/20 border-rose-500/50 text-rose-400" },
-  { value: "Flood", label: "Flood", icon: Droplets, activeClasses: "bg-blue-500/20 border-blue-500/50 text-blue-400" },
-  { value: "Blocked Road", label: "Blocked Road", icon: AlertTriangle, activeClasses: "bg-amber-500/20 border-amber-500/50 text-amber-400" },
-  { value: "Other", label: "Other", icon: Activity, activeClasses: "bg-white/10 border-white/30 text-white" },
+  {
+    value: "Landslide",
+    label: "Landslide",
+    icon: Mountain,
+    activeClasses: "bg-rose-500/20 border-rose-500/50 text-rose-400",
+  },
+  {
+    value: "Flood",
+    label: "Flood",
+    icon: Droplets,
+    activeClasses: "bg-blue-500/20 border-blue-500/50 text-blue-400",
+  },
+  {
+    value: "Blocked Road",
+    label: "Blocked Road",
+    icon: AlertTriangle,
+    activeClasses: "bg-amber-500/20 border-amber-500/50 text-amber-400",
+  },
+  {
+    value: "Other",
+    label: "Other",
+    icon: Activity,
+    activeClasses: "bg-white/10 border-white/30 text-white",
+  },
 ] as const;
 
 const TYPE_ICON: Record<string, React.ElementType> = {
@@ -111,12 +140,15 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
       <div className="bg-[#121923] border border-white/5 rounded-3xl p-6 lg:p-8 flex flex-col">
         <h3 className="text-xl font-serif text-white mb-2">Report a Hazard</h3>
         <p className="text-xs text-slate-400 mb-6">
-          Help your community navigate safely. Report blocked roads, landslides, or rising water immediately.
+          Help your community navigate safely. Report blocked roads, landslides, or rising water
+          immediately.
         </p>
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
-            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-2 block">Hazard Type</label>
+            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-2 block">
+              Hazard Type
+            </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {HAZARD_TYPES.map(({ value, label, icon: Icon, activeClasses }) => (
                 <button
@@ -124,7 +156,9 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
                   type="button"
                   onClick={() => setHazardType(value)}
                   className={`border rounded-lg p-2 flex flex-col items-center gap-1 text-[10px] font-bold uppercase transition-colors ${
-                    hazardType === value ? activeClasses : "border-white/10 bg-black/30 text-slate-400"
+                    hazardType === value
+                      ? activeClasses
+                      : "border-white/10 bg-black/30 text-slate-400"
                   }`}
                 >
                   <Icon className="size-4" />
@@ -135,7 +169,9 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
           </div>
 
           <div>
-            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Location</label>
+            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">
+              Location
+            </label>
             <input
               type="text"
               value={location}
@@ -146,7 +182,9 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
           </div>
 
           <div>
-            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">Description</label>
+            <label className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1 block">
+              Description
+            </label>
             <textarea
               rows={3}
               value={description}
@@ -190,19 +228,28 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
           ) : loadError ? (
             <p className="text-sm text-rose-400 text-center py-8">{loadError}</p>
           ) : reports.length === 0 ? (
-            <p className="text-sm text-slate-500 text-center py-8">No reports yet. Be the first to report a hazard.</p>
+            <p className="text-sm text-slate-500 text-center py-8">
+              No reports yet. Be the first to report a hazard.
+            </p>
           ) : (
             reports.map((r) => {
               const Icon = TYPE_ICON[r.report_type] ?? Activity;
-              const [textColor, barColor] = (TYPE_COLOR[r.report_type] ?? "text-white bg-white/50").split(" ");
+              const [textColor, barColor] = (
+                TYPE_COLOR[r.report_type] ?? "text-white bg-white/50"
+              ).split(" ");
               return (
-                <div key={r.id} className="bg-[#121923] p-4 rounded-xl border border-white/5 relative overflow-hidden">
+                <div
+                  key={r.id}
+                  className="bg-[#121923] p-4 rounded-xl border border-white/5 relative overflow-hidden"
+                >
                   <div className={`absolute top-0 left-0 w-1 h-full ${barColor}`}></div>
                   <div className="flex justify-between items-start mb-2">
                     <div className={`flex items-center gap-2 font-bold text-sm ${textColor}`}>
                       <Icon className="size-4" /> {r.report_type}
                     </div>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase">{timeAgo(r.timestamp)}</span>
+                    <span className="text-[10px] font-mono text-slate-500 uppercase">
+                      {timeAgo(r.timestamp)}
+                    </span>
                   </div>
                   <p className="text-slate-300 text-sm mb-3">{r.description}</p>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] font-mono text-slate-400">
@@ -212,7 +259,8 @@ export function CommunityReportsSection({ userName }: { userName?: string }) {
                       </span>
                     )}
                     <span className="flex items-center gap-1">
-                      <User className="size-3" /> {r.reported_by ? `Reported by ${r.reported_by}` : "Anonymous report"}
+                      <User className="size-3" />{" "}
+                      {r.reported_by ? `Reported by ${r.reported_by}` : "Anonymous report"}
                     </span>
                   </div>
                 </div>

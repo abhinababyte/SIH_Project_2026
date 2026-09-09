@@ -1,42 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { CheckCircle2, Send, ShieldAlert } from "lucide-react"
-import { toast } from "sonner"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { CheckCircle2, Send, ShieldAlert } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { SeverityBadge, severityColor } from "@/components/severity-badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   INCIDENT_TYPES,
   INITIAL_REPORTS,
-  SEVERITY_META,
-  timeAgo,
   type IncidentReport,
+  SEVERITY_META,
   type Severity,
-} from "@/lib/flood-data"
-import { SeverityBadge, severityColor } from "@/components/severity-badge"
+  timeAgo,
+} from "@/lib/flood-data";
 
 export function ReportSection() {
-  const [reports, setReports] = useState<IncidentReport[]>(INITIAL_REPORTS)
-  const [type, setType] = useState("")
-  const [severity, setSeverity] = useState<Severity>("watch")
-  const [location, setLocation] = useState("")
-  const [description, setDescription] = useState("")
+  const [reports, setReports] = useState<IncidentReport[]>(INITIAL_REPORTS);
+  const [type, setType] = useState("");
+  const [severity, setSeverity] = useState<Severity>("watch");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     if (!type || !location.trim() || !description.trim()) {
-      toast.error("Please fill in the type, location, and description.")
-      return
+      toast.error("Please fill in the type, location, and description.");
+      return;
     }
     const report: IncidentReport = {
       id: `ir-${Date.now()}`,
@@ -46,15 +46,15 @@ export function ReportSection() {
       description: description.trim(),
       reportedMinsAgo: 0,
       status: "new",
-    }
-    setReports((prev) => [report, ...prev])
+    };
+    setReports((prev) => [report, ...prev]);
     toast.success("Report submitted", {
       description: "Thank you. Local responders have been notified.",
-    })
-    setType("")
-    setSeverity("watch")
-    setLocation("")
-    setDescription("")
+    });
+    setType("");
+    setSeverity("watch");
+    setLocation("");
+    setDescription("");
   }
 
   return (
@@ -65,8 +65,8 @@ export function ReportSection() {
           <h2 className="text-sm font-semibold">Report an incident</h2>
         </div>
         <p className="-mt-2 text-xs text-muted-foreground">
-          Emergency? Call your local services first. Use this to report flooding,
-          blockages, or hazards you can see.
+          Emergency? Call your local services first. Use this to report flooding, blockages, or
+          hazards you can see.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -96,10 +96,8 @@ export function ReportSection() {
                   onClick={() => setSeverity(sev)}
                   className="flex flex-col items-center gap-1 rounded-lg border p-2 text-[11px] font-medium capitalize transition-colors"
                   style={{
-                    borderColor:
-                      severity === sev ? severityColor[sev] : "var(--border)",
-                    background:
-                      severity === sev ? `${severityColor[sev]}22` : "transparent",
+                    borderColor: severity === sev ? severityColor[sev] : "var(--border)",
+                    background: severity === sev ? `${severityColor[sev]}22` : "transparent",
                     color: severity === sev ? severityColor[sev] : undefined,
                   }}
                   aria-pressed={severity === sev}
@@ -163,11 +161,8 @@ export function ReportSection() {
                   className="rounded-full px-2 py-0.5 font-medium capitalize"
                   style={{
                     background:
-                      r.status === "verified"
-                        ? `${severityColor.safe}22`
-                        : "var(--muted)",
-                    color:
-                      r.status === "verified" ? severityColor.safe : undefined,
+                      r.status === "verified" ? `${severityColor.safe}22` : "var(--muted)",
+                    color: r.status === "verified" ? severityColor.safe : undefined,
                   }}
                 >
                   {r.status}
@@ -179,5 +174,5 @@ export function ReportSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

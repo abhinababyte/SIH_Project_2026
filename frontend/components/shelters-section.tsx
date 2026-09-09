@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { Navigation, Users, Route as RouteIcon } from "lucide-react"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { EVAC_ROUTES, SHELTERS, TOWN } from "@/lib/flood-data"
-import { severityColor } from "@/components/severity-badge"
-import { cn } from "@/lib/utils"
+import { Navigation, Route as RouteIcon, Users } from "lucide-react";
+import { severityColor } from "@/components/severity-badge";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { EVAC_ROUTES, SHELTERS, TOWN } from "@/lib/flood-data";
+import { cn } from "@/lib/utils";
 
 const shelterStatus: Record<string, string> = {
   open: "bg-safe text-safe-foreground",
   standby: "bg-watch text-watch-foreground",
   full: "bg-danger text-danger-foreground",
-}
+};
 
 const routeStatusColor: Record<string, string> = {
   clear: severityColor.safe,
   congested: severityColor.watch,
   blocked: severityColor.danger,
-}
+};
 
 export function SheltersSection() {
   return (
@@ -29,7 +29,7 @@ export function SheltersSection() {
         </div>
         <div className="space-y-2">
           {EVAC_ROUTES.map((r) => {
-            const shelter = SHELTERS.find((s) => s.id === r.toShelterId)
+            const shelter = SHELTERS.find((s) => s.id === r.toShelterId);
             return (
               <Card key={r.id} className="flex-row items-center gap-3 p-3">
                 <span
@@ -38,9 +38,7 @@ export function SheltersSection() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium leading-tight">{r.name}</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    to {shelter?.name}
-                  </p>
+                  <p className="truncate text-xs text-muted-foreground">to {shelter?.name}</p>
                 </div>
                 <span
                   className="text-xs font-semibold capitalize"
@@ -49,7 +47,7 @@ export function SheltersSection() {
                   {r.status}
                 </span>
               </Card>
-            )
+            );
           })}
         </div>
       </div>
@@ -63,14 +61,12 @@ export function SheltersSection() {
           {[...SHELTERS]
             .sort((a, b) => a.distanceKm - b.distanceKm)
             .map((sh) => {
-              const pct = Math.round((sh.occupied / sh.capacity) * 100)
+              const pct = Math.round((sh.occupied / sh.capacity) * 100);
               return (
                 <Card key={sh.id} className="gap-3 p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="text-sm font-semibold leading-tight">
-                        {sh.name}
-                      </h3>
+                      <h3 className="text-sm font-semibold leading-tight">{sh.name}</h3>
                       <p className="text-xs text-muted-foreground">
                         {sh.address} · {sh.distanceKm} km away
                       </p>
@@ -127,10 +123,10 @@ export function SheltersSection() {
                     </a>
                   </div>
                 </Card>
-              )
+              );
             })}
         </div>
       </div>
     </section>
-  )
+  );
 }

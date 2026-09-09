@@ -1,21 +1,22 @@
 // components/IncidentBoard.tsx
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
   Droplets,
   MapPin,
-  Clock,
-  ArrowRight,
-  AlertTriangle,
-  CheckCircle2,
   Truck,
   Users,
   Zap,
 } from "lucide-react";
+import type React from "react";
+import { useCallback, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -76,8 +77,7 @@ const INITIAL_INCIDENTS: Record<ColumnKey, Incident[]> = {
       detectedAt: "2025-01-15T15:45:00Z",
       waterLevel: 2.5,
       populationAffected: 80,
-      description:
-        "Water level rising steadily. Dam operators notified. Monitoring continues.",
+      description: "Water level rising steadily. Dam operators notified. Monitoring continues.",
     },
   ],
   acknowledged: [
@@ -142,8 +142,8 @@ const COLUMNS: Column[] = [
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-import { SeverityBadge } from "@/components/severity-badge"
-import { Severity } from "@/lib/flood-data"
+import { SeverityBadge } from "@/components/severity-badge";
+import type { Severity } from "@/lib/flood-data";
 
 function formatTime(iso: string): string {
   const date = new Date(iso);
@@ -157,8 +157,7 @@ function formatTime(iso: string): string {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function IncidentBoard() {
-  const [incidents, setIncidents] =
-    useState<Record<ColumnKey, Incident[]>>(INITIAL_INCIDENTS);
+  const [incidents, setIncidents] = useState<Record<ColumnKey, Incident[]>>(INITIAL_INCIDENTS);
 
   const moveCard = useCallback((incidentId: string, from: ColumnKey) => {
     setIncidents((prev) => {
@@ -166,11 +165,7 @@ export function IncidentBoard() {
       if (cardIndex === -1) return prev;
 
       const card = prev[from][cardIndex];
-      const columnOrder: ColumnKey[] = [
-        "detected",
-        "acknowledged",
-        "evacuating",
-      ];
+      const columnOrder: ColumnKey[] = ["detected", "acknowledged", "evacuating"];
       const nextIndex = columnOrder.indexOf(from) + 1;
       if (nextIndex >= columnOrder.length) return prev;
 
@@ -195,9 +190,7 @@ export function IncidentBoard() {
             <AlertTriangle className="size-4 text-[#5E6AD2]" />
           </div>
           <div>
-            <h2 className="linear-label linear-text-muted">
-              Incident Command
-            </h2>
+            <h2 className="linear-label linear-text-muted">Incident Command</h2>
           </div>
         </div>
         <div className="flex items-center gap-2 text-[10px] linear-label text-[#5E6AD2]">
@@ -217,11 +210,12 @@ export function IncidentBoard() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-[#5E6AD2] opacity-80">{col.icon}</span>
-                <span className="linear-label text-white/70">
-                  {col.label}
-                </span>
+                <span className="linear-label text-white/70">{col.label}</span>
               </div>
-              <Badge variant="outline" className="text-[10px] px-2 py-0 border-white/10 bg-white/5 text-[#8A8F98]">
+              <Badge
+                variant="outline"
+                className="text-[10px] px-2 py-0 border-white/10 bg-white/5 text-[#8A8F98]"
+              >
                 {incidents[col.key].length}
               </Badge>
             </div>
@@ -246,9 +240,13 @@ export function IncidentBoard() {
                         <h3 className="text-sm font-semibold text-[#EDEDEF] tracking-tight leading-snug group-hover:text-white transition-colors">
                           {incident.title}
                         </h3>
-                        <SeverityBadge severity={incident.severity} showDot={false} className="scale-90 origin-right border border-white/5 bg-white/5" />
+                        <SeverityBadge
+                          severity={incident.severity}
+                          showDot={false}
+                          className="scale-90 origin-right border border-white/5 bg-white/5"
+                        />
                       </div>
-                      
+
                       <p className="text-xs text-[#8A8F98] leading-relaxed mb-4 font-normal">
                         {incident.description}
                       </p>
@@ -279,9 +277,7 @@ export function IncidentBoard() {
                           onClick={() => moveCard(incident.id, col.key)}
                           className="w-full h-8 text-xs font-medium bg-[#5E6AD2] hover:bg-[#6872D9] text-white rounded-lg shadow-[0_0_0_1px_rgba(94,106,210,0.5),0_4px_12px_rgba(94,106,210,0.3),inset_0_1px_0_0_rgba(255,255,255,0.2)] transition-all flex items-center justify-center active:scale-[0.98]"
                         >
-                          {col.key === "detected"
-                            ? "Acknowledge"
-                            : "Begin Evacuation"}
+                          {col.key === "detected" ? "Acknowledge" : "Begin Evacuation"}
                           <ArrowRight className="ml-1.5 size-3" />
                         </button>
                       )}

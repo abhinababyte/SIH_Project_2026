@@ -11,18 +11,18 @@
  */
 
 export interface AuthUser {
-  id: number;
-  full_name: string;
-  email: string;
-  phone_number: string;
-  role: "resident" | "responder" | string;
+	id: number;
+	full_name: string;
+	email: string;
+	phone_number: string;
+	role: "resident" | "responder" | string;
 }
 
 export interface TokenResponse {
-  access_token: string;
-  refresh_token: string;
-  token_type: string;
-  user: AuthUser;
+	access_token: string;
+	refresh_token: string;
+	token_type: string;
+	user: AuthUser;
 }
 
 const KEY_ACCESS = "hillshield_access_token";
@@ -30,48 +30,48 @@ const KEY_REFRESH = "hillshield_refresh_token";
 const KEY_USER = "hillshield_user";
 
 function isBrowser(): boolean {
-  return typeof window !== "undefined";
+	return typeof window !== "undefined";
 }
 
 /** Store a complete TokenResponse from the backend (login or register). */
 export function setSession(data: TokenResponse): void {
-  if (!isBrowser()) return;
-  localStorage.setItem(KEY_ACCESS, data.access_token);
-  localStorage.setItem(KEY_REFRESH, data.refresh_token);
-  localStorage.setItem(KEY_USER, JSON.stringify(data.user));
+	if (!isBrowser()) return;
+	localStorage.setItem(KEY_ACCESS, data.access_token);
+	localStorage.setItem(KEY_REFRESH, data.refresh_token);
+	localStorage.setItem(KEY_USER, JSON.stringify(data.user));
 }
 
 /** Remove all session data (logout). */
 export function clearSession(): void {
-  if (!isBrowser()) return;
-  localStorage.removeItem(KEY_ACCESS);
-  localStorage.removeItem(KEY_REFRESH);
-  localStorage.removeItem(KEY_USER);
-  // Also clear the legacy key used before JWT was wired up.
-  localStorage.removeItem("hillshield_user_name");
+	if (!isBrowser()) return;
+	localStorage.removeItem(KEY_ACCESS);
+	localStorage.removeItem(KEY_REFRESH);
+	localStorage.removeItem(KEY_USER);
+	// Also clear the legacy key used before JWT was wired up.
+	localStorage.removeItem("hillshield_user_name");
 }
 
 export function getAccessToken(): string | null {
-  if (!isBrowser()) return null;
-  return localStorage.getItem(KEY_ACCESS);
+	if (!isBrowser()) return null;
+	return localStorage.getItem(KEY_ACCESS);
 }
 
 export function getRefreshToken(): string | null {
-  if (!isBrowser()) return null;
-  return localStorage.getItem(KEY_REFRESH);
+	if (!isBrowser()) return null;
+	return localStorage.getItem(KEY_REFRESH);
 }
 
 export function getUser(): AuthUser | null {
-  if (!isBrowser()) return null;
-  const raw = localStorage.getItem(KEY_USER);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as AuthUser;
-  } catch {
-    return null;
-  }
+	if (!isBrowser()) return null;
+	const raw = localStorage.getItem(KEY_USER);
+	if (!raw) return null;
+	try {
+		return JSON.parse(raw) as AuthUser;
+	} catch {
+		return null;
+	}
 }
 
 export function isAuthenticated(): boolean {
-  return getAccessToken() !== null && getUser() !== null;
+	return getAccessToken() !== null && getUser() !== null;
 }

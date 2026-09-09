@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { X, Send, Helicopter, CheckCircle, Clock, ShieldAlert } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CheckCircle, Clock, Helicopter, Send, ShieldAlert, X } from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { API_BASE } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 interface Escalation {
   id: string;
@@ -27,7 +28,7 @@ function timeAgo(iso: string): string {
   return `${hrs} hr${hrs === 1 ? "" : "s"} ago`;
 }
 
-export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [resourceType, setResourceType] = useState("");
@@ -63,7 +64,12 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
       const res = await fetch(`${API_BASE}/api/escalations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resource_type: resourceType, priority, location, description }),
+        body: JSON.stringify({
+          resource_type: resourceType,
+          priority,
+          location,
+          description,
+        }),
       });
       if (!res.ok) throw new Error("Failed to submit escalation");
       const created: Escalation = await res.json();
@@ -96,7 +102,10 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
             <h2 className="text-base sm:text-lg font-medium text-slate-200">Resource Escalation</h2>
           </div>
         </div>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+        <button
+          onClick={onClose}
+          className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors"
+        >
           <X className="size-5" />
         </button>
       </div>
@@ -104,10 +113,10 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
       <div className="flex-1 overflow-y-auto no-scrollbar">
         {/* Active Escalations List */}
         <div className="px-6 py-6 border-b border-white/5 bg-white/[0.01]">
-          <h3 className="text-[10px] font-mono tracking-widest uppercase text-slate-500 mb-4">Active HQ Escalations</h3>
-          {loadError && (
-            <p className="text-xs text-rose-400 mb-4">{loadError}</p>
-          )}
+          <h3 className="text-[10px] font-mono tracking-widest uppercase text-slate-500 mb-4">
+            Active HQ Escalations
+          </h3>
+          {loadError && <p className="text-xs text-rose-400 mb-4">{loadError}</p>}
           <div className="space-y-3">
             {escalations.length === 0 && !loadError ? (
               <p className="text-xs text-slate-500 py-2">No active escalations.</p>
@@ -116,18 +125,37 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 <div key={req.id} className="bg-[#121826] border border-white/5 rounded-xl p-3.5">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h4 className="text-sm font-medium text-slate-200">{req.resource_type}</h4>
-                    <div className={cn("px-2 py-0.5 rounded text-[9px] font-bold tracking-widest text-white", PRIORITY_BADGE[req.priority] ?? "bg-slate-500")}>
+                    <div
+                      className={cn(
+                        "px-2 py-0.5 rounded text-[9px] font-bold tracking-widest text-white",
+                        PRIORITY_BADGE[req.priority] ?? "bg-slate-500",
+                      )}
+                    >
                       {req.priority.toUpperCase()}
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-2">
                     <span className="font-medium text-orange-400/80">{req.location}</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 leading-relaxed mb-3">{req.description}</p>
+                  <p className="text-[11px] text-slate-500 leading-relaxed mb-3">
+                    {req.description}
+                  </p>
                   <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-white/5">
-                    <div className="flex items-center gap-1"><Clock className="size-3"/> {timeAgo(req.timestamp)}</div>
-                    <div className={cn("flex items-center gap-1 font-bold", req.status === "DISPATCHED" ? "text-emerald-400" : "text-amber-400")}>
-                      {req.status === "DISPATCHED" ? <Helicopter className="size-3"/> : <ShieldAlert className="size-3"/>} {req.status}
+                    <div className="flex items-center gap-1">
+                      <Clock className="size-3" /> {timeAgo(req.timestamp)}
+                    </div>
+                    <div
+                      className={cn(
+                        "flex items-center gap-1 font-bold",
+                        req.status === "DISPATCHED" ? "text-emerald-400" : "text-amber-400",
+                      )}
+                    >
+                      {req.status === "DISPATCHED" ? (
+                        <Helicopter className="size-3" />
+                      ) : (
+                        <ShieldAlert className="size-3" />
+                      )}{" "}
+                      {req.status}
                     </div>
                   </div>
                 </div>
@@ -138,18 +166,24 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
 
         {/* Escalation Form */}
         <div className="px-6 py-6">
-          <h3 className="text-[10px] font-mono tracking-widest uppercase text-slate-500 mb-6">Request Higher Authority Support</h3>
+          <h3 className="text-[10px] font-mono tracking-widest uppercase text-slate-500 mb-6">
+            Request Higher Authority Support
+          </h3>
 
           {submitted ? (
             <div className="flex flex-col items-center justify-center py-10 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
               <CheckCircle className="size-12 text-emerald-500 mb-4" />
               <h3 className="text-lg font-medium text-emerald-400 mb-2">Request Transmitted</h3>
-              <p className="text-sm text-emerald-400/70 text-center px-6">HQ has received your escalation. Dispatch ETA will be updated shortly.</p>
+              <p className="text-sm text-emerald-400/70 text-center px-6">
+                HQ has received your escalation. Dispatch ETA will be updated shortly.
+              </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Support Required</label>
+                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">
+                  Support Required
+                </label>
                 <div className="relative">
                   <select
                     required
@@ -157,7 +191,9 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                     onChange={(e) => setResourceType(e.target.value)}
                     className="w-full bg-[#121826] border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-rose-500/50 appearance-none"
                   >
-                    <option value="" disabled>Select resource...</option>
+                    <option value="" disabled>
+                      Select resource...
+                    </option>
                     <option value="Helicopter Evacuation">Helicopter Evacuation</option>
                     <option value="Medical Airdrop">Medical Supplies Airdrop</option>
                     <option value="Heavy Machinery">Heavy Machinery (Excavator)</option>
@@ -168,7 +204,9 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Priority Level</label>
+                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">
+                  Priority Level
+                </label>
                 <div className="grid grid-cols-3 gap-2">
                   {["Standard", "Urgent", "Critical"].map((level) => (
                     <button
@@ -178,10 +216,12 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                       className={cn(
                         "py-2 rounded-lg text-[11px] font-bold tracking-wider uppercase border transition-all",
                         priority === level
-                          ? level === "Critical" ? "bg-rose-500/20 border-rose-500 text-rose-400" :
-                            level === "Urgent" ? "bg-orange-500/20 border-orange-500 text-orange-400" :
-                            "bg-[#5E6AD2]/20 border-[#5E6AD2] text-[#5E6AD2]"
-                          : "bg-white/5 border-white/5 text-slate-500 hover:bg-white/10"
+                          ? level === "Critical"
+                            ? "bg-rose-500/20 border-rose-500 text-rose-400"
+                            : level === "Urgent"
+                              ? "bg-orange-500/20 border-orange-500 text-orange-400"
+                              : "bg-[#5E6AD2]/20 border-[#5E6AD2] text-[#5E6AD2]"
+                          : "bg-white/5 border-white/5 text-slate-500 hover:bg-white/10",
                       )}
                     >
                       {level}
@@ -191,7 +231,9 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Exact Coordinates / Location</label>
+                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">
+                  Exact Coordinates / Location
+                </label>
                 <input
                   type="text"
                   required
@@ -203,7 +245,9 @@ export default function ReportPanel({ isOpen, onClose }: { isOpen: boolean, onCl
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Situation Assessment</label>
+                <label className="text-[10px] font-mono tracking-widest uppercase text-slate-400">
+                  Situation Assessment
+                </label>
                 <textarea
                   required
                   value={description}

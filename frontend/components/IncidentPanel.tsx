@@ -1,17 +1,10 @@
 // components/IncidentBoard.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { AlertTriangle, CheckCircle2, Clock, MapPin, Truck, X, Zap } from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import {
-  MapPin,
-  Clock,
-  AlertTriangle,
-  CheckCircle2,
-  Truck,
-  Zap,
-  X,
-} from "lucide-react";
 import { API_BASE } from "@/lib/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -38,22 +31,38 @@ interface Column {
 
 const COLUMNS: Column[] = [
   { key: "detected", label: "Detected", icon: <Zap className="h-4 w-4" /> },
-  { key: "acknowledged", label: "Rescuers Dispatched", icon: <Truck className="h-4 w-4" /> },
-  { key: "evacuating", label: "Evacuation in Progress", icon: <AlertTriangle className="h-4 w-4" /> },
-  { key: "completed", label: "Completed", icon: <CheckCircle2 className="h-4 w-4" /> },
+  {
+    key: "acknowledged",
+    label: "Rescuers Dispatched",
+    icon: <Truck className="h-4 w-4" />,
+  },
+  {
+    key: "evacuating",
+    label: "Evacuation in Progress",
+    icon: <AlertTriangle className="h-4 w-4" />,
+  },
+  {
+    key: "completed",
+    label: "Completed",
+    icon: <CheckCircle2 className="h-4 w-4" />,
+  },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-import { SeverityBadge } from "@/components/severity-badge"
-import { Severity } from "@/lib/flood-data"
+import { SeverityBadge } from "@/components/severity-badge";
+import type { Severity } from "@/lib/flood-data";
 
 function priorityToSeverity(priority: string): Severity {
   switch (priority?.toLowerCase()) {
-    case "critical": return "danger";
-    case "high": return "warning";
-    case "medium": return "watch";
-    default: return "safe";
+    case "critical":
+      return "danger";
+    case "high":
+      return "warning";
+    case "medium":
+      return "watch";
+    default:
+      return "safe";
   }
 }
 
@@ -72,7 +81,13 @@ function emptyBoard(): Record<ColumnKey, Incident[]> {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+export default function IncidentPanel({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const [incidents, setIncidents] = useState<Record<ColumnKey, Incident[]>>(emptyBoard());
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -108,11 +123,18 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
     }));
   };
 
-  const transition = async (incident: Incident, from: ColumnKey, to: ColumnKey, endpoint: string) => {
+  const transition = async (
+    incident: Incident,
+    from: ColumnKey,
+    to: ColumnKey,
+    endpoint: string,
+  ) => {
     // Update instantly, then persist — the next poll reconciles if this fails.
     moveIncident(incident, from, to);
     try {
-      const res = await fetch(`${API_BASE}/api/incidents/${incident.id}/${endpoint}`, { method: "POST" });
+      const res = await fetch(`${API_BASE}/api/incidents/${incident.id}/${endpoint}`, {
+        method: "POST",
+      });
       if (!res.ok) throw new Error(`Failed to ${endpoint} incident`);
     } catch (err) {
       console.error(err);
@@ -120,9 +142,12 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
     }
   };
 
-  const acknowledgeIncident = (incident: Incident) => transition(incident, "detected", "acknowledged", "acknowledge");
-  const startEvacuation = (incident: Incident) => transition(incident, "acknowledged", "evacuating", "start-evacuation");
-  const completeIncident = (incident: Incident) => transition(incident, "evacuating", "completed", "complete");
+  const acknowledgeIncident = (incident: Incident) =>
+    transition(incident, "detected", "acknowledged", "acknowledge");
+  const startEvacuation = (incident: Incident) =>
+    transition(incident, "acknowledged", "evacuating", "start-evacuation");
+  const completeIncident = (incident: Incident) =>
+    transition(incident, "evacuating", "completed", "complete");
 
   return (
     <div className="flex h-full w-full max-w-full flex-col overflow-hidden bg-[#0a101d] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
@@ -133,9 +158,7 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
             <AlertTriangle className="size-3.5 sm:size-4 text-[#5E6AD2]" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-medium text-slate-200">
-              Incident Command
-            </h2>
+            <h2 className="text-base sm:text-lg font-medium text-slate-200">Incident Command</h2>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -143,23 +166,21 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
             <span className="inline-block size-1.5 rounded-full bg-[#5E6AD2] animate-pulse shadow-[0_0_8px_rgba(94,106,210,0.8)]" />
             Live
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-white/5 text-slate-400 transition-colors"
+          >
             <X className="size-5" />
           </button>
         </div>
       </div>
 
-      {loadError && (
-        <p className="mx-6 mb-2 text-[11px] text-rose-400">{loadError}</p>
-      )}
+      {loadError && <p className="mx-6 mb-2 text-[11px] text-rose-400">{loadError}</p>}
 
       {/* Kanban Columns */}
       <div className="grid grid-cols-1 gap-6 overflow-y-auto no-scrollbar flex-1 p-6 pt-2 pb-6">
         {COLUMNS.map((col) => (
-          <div
-            key={col.key}
-            className="flex flex-col gap-3"
-          >
+          <div key={col.key} className="flex flex-col gap-3">
             {/* Column Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -168,7 +189,10 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
                   {col.label}
                 </span>
               </div>
-              <Badge variant="outline" className="text-[10px] px-2 py-0 border-white/10 bg-white/5 text-[#8A8F98]">
+              <Badge
+                variant="outline"
+                className="text-[10px] px-2 py-0 border-white/10 bg-white/5 text-[#8A8F98]"
+              >
                 {incidents[col.key].length}
               </Badge>
             </div>
@@ -191,7 +215,11 @@ export default function IncidentPanel({ isOpen, onClose }: { isOpen: boolean, on
                         <h3 className="text-[15px] font-medium text-slate-200 leading-tight">
                           {incident.title}
                         </h3>
-                        <SeverityBadge severity={priorityToSeverity(incident.priority)} showDot={false} className="scale-90 origin-right border border-white/5 bg-white/5" />
+                        <SeverityBadge
+                          severity={priorityToSeverity(incident.priority)}
+                          showDot={false}
+                          className="scale-90 origin-right border border-white/5 bg-white/5"
+                        />
                       </div>
 
                       {/* Meta Row */}

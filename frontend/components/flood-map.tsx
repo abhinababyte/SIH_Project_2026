@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import "leaflet/dist/leaflet.css"
-import L from "leaflet"
-import { useEffect, useState } from "react"
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { useEffect, useState } from "react";
 import {
   CircleMarker,
   MapContainer,
@@ -11,21 +11,15 @@ import {
   TileLayer,
   Tooltip,
   useMapEvents,
-} from "react-leaflet"
-import {
-  EVAC_ROUTES,
-  HOTSPOTS,
-  SHELTERS,
-  TOWN,
-  type Sensor,
-} from "@/lib/flood-data"
-import { severityColor } from "@/components/severity-badge"
+} from "react-leaflet";
+import { severityColor } from "@/components/severity-badge";
+import { EVAC_ROUTES, HOTSPOTS, type Sensor, SHELTERS, TOWN } from "@/lib/flood-data";
 
 const routeColor: Record<string, string> = {
   clear: severityColor.safe,
   congested: severityColor.watch,
   blocked: severityColor.danger,
-}
+};
 
 function shelterIcon(status: string) {
   const bg =
@@ -33,13 +27,13 @@ function shelterIcon(status: string) {
       ? severityColor.danger
       : status === "standby"
         ? severityColor.watch
-        : severityColor.safe
+        : severityColor.safe;
   return L.divIcon({
     className: "custom-shelter-icon",
     html: `<div style="background-color: ${bg}; width: 18px; height: 18px; border-radius: 4px; border: 2px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 10px; height: 10px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>`,
     iconSize: [18, 18],
     iconAnchor: [9, 9],
-  })
+  });
 }
 
 const blockedRouteIcon = L.divIcon({
@@ -68,15 +62,25 @@ function MapEffect() {
     click() {
       // Could trigger an onClick event if needed for empty areas
     },
-  })
-  return null
+  });
+  return null;
 }
 
-export default function FloodMap({ sensors, onSensorClick, showUserLocation = false, blockedRoutes = [] }: { sensors: Sensor[], onSensorClick?: (sensor: Sensor) => void, showUserLocation?: boolean, blockedRoutes?: {id: string, lat: number, lng: number, title: string}[] }) {
+export default function FloodMap({
+  sensors,
+  onSensorClick,
+  showUserLocation = false,
+  blockedRoutes = [],
+}: {
+  sensors: Sensor[];
+  onSensorClick?: (sensor: Sensor) => void;
+  showUserLocation?: boolean;
+  blockedRoutes?: { id: string; lat: number; lng: number; title: string }[];
+}) {
   const [realUserLoc, setRealUserLoc] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    if (showUserLocation && typeof window !== 'undefined' && 'geolocation' in navigator) {
+    if (showUserLocation && typeof window !== "undefined" && "geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setRealUserLoc([pos.coords.latitude, pos.coords.longitude]);
@@ -85,7 +89,7 @@ export default function FloodMap({ sensors, onSensorClick, showUserLocation = fa
           console.warn("Geolocation error:", err);
           setRealUserLoc([TOWN.center[0] - 0.005, TOWN.center[1] + 0.005]);
         },
-        { enableHighAccuracy: true }
+        { enableHighAccuracy: true },
       );
     } else if (showUserLocation) {
       setRealUserLoc([TOWN.center[0] - 0.005, TOWN.center[1] + 0.005]);
@@ -143,15 +147,16 @@ export default function FloodMap({ sensors, onSensorClick, showUserLocation = fa
           center={h.position}
           radius={12}
           eventHandlers={{
-            click: () => onSensorClick?.({
-              id: h.id,
-              name: h.name,
-              position: h.position,
-              type: "rain", // mock type for hotspot
-              level: h.severity === "danger" ? 95 : h.severity === "warning" ? 65 : 20,
-              severity: h.severity,
-              trend: "up",
-            })
+            click: () =>
+              onSensorClick?.({
+                id: h.id,
+                name: h.name,
+                position: h.position,
+                type: "rain", // mock type for hotspot
+                level: h.severity === "danger" ? 95 : h.severity === "warning" ? 65 : 20,
+                severity: h.severity,
+                trend: "up",
+              }),
           }}
           pathOptions={{
             color: severityColor[h.severity],
@@ -173,7 +178,7 @@ export default function FloodMap({ sensors, onSensorClick, showUserLocation = fa
           center={s.position}
           radius={8}
           eventHandlers={{
-            click: () => onSensorClick?.(s)
+            click: () => onSensorClick?.(s),
           }}
           pathOptions={{
             color: "white",
@@ -188,21 +193,30 @@ export default function FloodMap({ sensors, onSensorClick, showUserLocation = fa
         </CircleMarker>
       ))}
 
-      {blockedRoutes.map(route => (
+      {blockedRoutes.map((route) => (
         <Marker key={route.id} position={[route.lat, route.lng]} icon={blockedRouteIcon}>
-          <Tooltip direction="top" offset={[0, -12]} className="bg-red-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded backdrop-blur-md uppercase tracking-wider">
+          <Tooltip
+            direction="top"
+            offset={[0, -12]}
+            className="bg-red-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded backdrop-blur-md uppercase tracking-wider"
+          >
             BLOCKED: {route.title}
           </Tooltip>
         </Marker>
       ))}
-      
+
       {showUserLocation && realUserLoc && (
         <Marker position={realUserLoc} icon={userLocationIcon}>
-          <Tooltip permanent direction="bottom" offset={[0, 8]} className="bg-blue-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded-full backdrop-blur-md">
+          <Tooltip
+            permanent
+            direction="bottom"
+            offset={[0, 8]}
+            className="bg-blue-600/90 text-white font-bold text-[10px] border-white/10 shadow-xl px-2 py-1 rounded-full backdrop-blur-md"
+          >
             You are here
           </Tooltip>
         </Marker>
       )}
     </MapContainer>
-  )
+  );
 }

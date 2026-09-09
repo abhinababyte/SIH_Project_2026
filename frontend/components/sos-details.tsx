@@ -1,4 +1,12 @@
-import { Phone, ShieldAlert, Activity, Radio, Wrench, AlertTriangle, Ambulance } from "lucide-react"
+import {
+  Activity,
+  AlertTriangle,
+  Ambulance,
+  Phone,
+  Radio,
+  ShieldAlert,
+  Wrench,
+} from "lucide-react";
 
 export function SosDetails({ userType = "responder" }: { userType?: "resident" | "responder" }) {
   if (userType === "resident") {
@@ -8,11 +16,16 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
           <div className="size-8 rounded-full bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
             <Phone className="size-4 text-rose-500" />
           </div>
-          <h2 className="text-sm font-semibold tracking-wider uppercase text-rose-500">Emergency SOS</h2>
+          <h2 className="text-sm font-semibold tracking-wider uppercase text-rose-500">
+            Emergency SOS
+          </h2>
         </div>
 
         <div className="flex flex-col gap-3">
-          <a href="tel:108" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+          <a
+            href="tel:108"
+            className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+          >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/30 transition-colors">
                 <Ambulance className="size-4" />
@@ -22,10 +35,15 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
                 <span className="text-[10px] text-slate-400">Medical Emergency</span>
               </div>
             </div>
-            <span className="text-lg font-mono font-bold text-emerald-400 tracking-widest">108</span>
+            <span className="text-lg font-mono font-bold text-emerald-400 tracking-widest">
+              108
+            </span>
           </a>
 
-          <a href="tel:100" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+          <a
+            href="tel:100"
+            className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+          >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 group-hover:bg-blue-500/30 transition-colors">
                 <ShieldAlert className="size-4" />
@@ -38,7 +56,10 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
             <span className="text-lg font-mono font-bold text-blue-400 tracking-widest">100</span>
           </a>
 
-          <a href="tel:1078" className="flex items-center justify-between p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-colors group">
+          <a
+            href="tel:1078"
+            className="flex items-center justify-between p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-colors group"
+          >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 group-hover:bg-rose-500/30 transition-colors">
                 <Activity className="size-4 animate-pulse" />
@@ -52,7 +73,7 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
           </a>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -61,12 +82,17 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
         <div className="size-8 rounded-full bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
           <Phone className="size-4 text-rose-500" />
         </div>
-        <h2 className="text-sm font-semibold tracking-wider uppercase text-rose-500">Tactical SOS</h2>
+        <h2 className="text-sm font-semibold tracking-wider uppercase text-rose-500">
+          Tactical SOS
+        </h2>
       </div>
 
       <div className="flex flex-col gap-3">
         {/* Sector Command / HQ Operations */}
-        <a href="tel:0001" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+        <a
+          href="tel:0001"
+          className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+        >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 group-hover:bg-blue-500/30 transition-colors">
               <Radio className="size-4" />
@@ -80,7 +106,10 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
         </a>
 
         {/* Medevac / Air Extraction */}
-        <a href="tel:0002" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+        <a
+          href="tel:0002"
+          className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+        >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/30 transition-colors">
               <Activity className="size-4" />
@@ -94,7 +123,10 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
         </a>
 
         {/* Heavy Engineering */}
-        <a href="tel:0003" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+        <a
+          href="tel:0003"
+          className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+        >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 group-hover:bg-amber-500/30 transition-colors">
               <Wrench className="size-4" />
@@ -108,7 +140,10 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
         </a>
 
         {/* Broadcast SOS */}
-        <button onClick={() => alert('SOS broadcast to all local units.')} className="w-full flex items-center justify-between p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-colors group">
+        <button
+          onClick={() => alert("SOS broadcast to all local units.")}
+          className="w-full flex items-center justify-between p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-colors group"
+        >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 group-hover:bg-rose-500/30 transition-colors">
               <AlertTriangle className="size-4 animate-pulse" />
@@ -123,9 +158,10 @@ export function SosDetails({ userType = "responder" }: { userType?: "resident" |
 
       <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20">
         <p className="text-[10px] text-rose-300/80 leading-relaxed text-center uppercase tracking-wider">
-          Do not use unless your unit is in immediate danger. GPS coordinates will be attached automatically.
+          Do not use unless your unit is in immediate danger. GPS coordinates will be attached
+          automatically.
         </p>
       </div>
     </div>
-  )
+  );
 }
