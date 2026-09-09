@@ -5,6 +5,7 @@ import { User, Radio, Eye, EyeOff, ArrowRight, ShieldCheck, ChevronDown, Activit
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { API_BASE } from "@/lib/api";
+import { setSession } from "@/lib/auth";
 import dynamic from "next/dynamic";
 import { useSimulation } from "@/components/simulation-provider";
 
@@ -27,9 +28,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    localStorage.removeItem("hillshield_user_name");
-  }, []);
+  // Session is cleared by clearSession() on logout; nothing to clear here.
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,11 +66,11 @@ export default function LoginPage() {
         return; // Stop navigation!
       }
 
-      // Success
-      localStorage.setItem("hillshield_user_name", data.full_name || (data.user && data.user.full_name) || displayName);
-      
-      const destinationRole = data.role || (data.user && data.user.role) || role;
-      
+      // Success — store real JWT tokens + user via the auth helper.
+      setSession(data);
+
+      const destinationRole = data.user?.role ?? data.role ?? role;
+
       setIsLoading(false);
       if (destinationRole === "responder") {
         router.push("/responder");

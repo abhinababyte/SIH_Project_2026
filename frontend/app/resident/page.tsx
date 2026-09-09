@@ -10,6 +10,8 @@ import { AlertsFeed } from "@/components/alerts-feed";
 import { CommunityReportsSection } from "@/components/CommunityReportsSection";
 import { useFloodWebsocket } from "@/hooks/use-flood-websocket";
 import { useSimulation } from "@/components/simulation-provider";
+import { AuthGuard } from "@/components/auth-guard";
+import { clearSession, getUser } from "@/lib/auth";
 
 const FloodMap = dynamic(() => import("@/components/flood-map"), {
   ssr: false,
@@ -61,10 +63,8 @@ export default function ResidentDashboard() {
   const soil = localSoil !== null ? localSoil : globalSoil;
 
   useEffect(() => {
-    const storedName = localStorage.getItem("hillshield_user_name");
-    if (storedName) {
-      setUserName(storedName);
-    }
+    const user = getUser();
+    if (user?.full_name) setUserName(user.full_name);
   }, []);
 
   // Derived metrics and severities
@@ -100,6 +100,7 @@ export default function ResidentDashboard() {
   // If survival mode is active, completely strip the UI down to the bare essentials (Cognitive Overload Shield)
   if (survivalMode) {
     return (
+      <AuthGuard requiredRole="resident">
       <div className="min-h-screen bg-black text-white font-sans flex flex-col p-6 animate-in fade-in duration-500 relative z-[100]">
         <div className="flex-1 max-w-md mx-auto w-full flex flex-col justify-center space-y-8">
           
@@ -137,10 +138,12 @@ export default function ResidentDashboard() {
           </button>
         </div>
       </div>
+      </AuthGuard>
     );
   }
 
   return (
+    <AuthGuard requiredRole="resident">
     <div className="min-h-screen bg-[#070b14] text-slate-200 selection:bg-rose-500/30 font-sans flex flex-col relative pt-24">
       
       <style dangerouslySetInnerHTML={{__html: `
@@ -239,27 +242,27 @@ export default function ResidentDashboard() {
                      <p className="text-xs text-slate-400">ID: R-402</p>
                    </div>
                    <div className="p-1">
-                     <button className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors">
-                       <Settings className="size-3.5" />
-                       Account Settings
-                     </button>
-                     <button className="w-full text-left px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg flex items-center gap-2 transition-colors mt-1">
-                       <Trash2 className="size-3.5" />
-                       Delete Account
-                     </button>
-                     <button 
-                       onClick={() => window.location.href = '/login'}
-                       className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors mt-1 border-t border-white/5 pt-2"
-                     >
-                       <LogOut className="size-3.5" />
-                       Sign Out
-                     </button>
-                   </div>
-                 </div>
-               </>
-             )}
-           </div>
-        </div>
+                      <button className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors">
+                        <Settings className="size-3.5" />
+                        Account Settings
+                      </button>
+                      <button className="w-full text-left px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg flex items-center gap-2 transition-colors mt-1">
+                        <Trash2 className="size-3.5" />
+                        Delete Account
+                      </button>
+                      <button
+                        onClick={() => { clearSession(); window.location.replace('/login'); }}
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors mt-1 border-t border-white/5 pt-2"
+                      >
+                        <LogOut className="size-3.5" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+         </div>
       </header>
 
       {/* LIVE NEWS TICKER (FLOATING BELOW HEADER) */}
@@ -911,6 +914,7 @@ export default function ResidentDashboard() {
       </footer>
 
     </div>
+    </AuthGuard>
   );
 }
 

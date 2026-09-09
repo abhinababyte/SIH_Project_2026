@@ -18,6 +18,8 @@ import { useFloodWebsocket } from "@/hooks/use-flood-websocket"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { overallSeverity, type Sensor } from "@/lib/flood-data"
+import { AuthGuard } from "@/components/auth-guard"
+import { clearSession, getUser } from "@/lib/auth"
 
 const FloodMap = dynamic(() => import("@/components/flood-map"), {
   ssr: false,
@@ -35,8 +37,8 @@ export default function TacticalCommandCenter() {
   const [userName, setUserName] = useState("Responder Node 01");
 
   useEffect(() => {
-    const storedName = localStorage.getItem("hillshield_user_name");
-    if (storedName) setUserName(storedName);
+    const user = getUser();
+    if (user?.full_name) setUserName(user.full_name);
     
     // DEMO: Transient Toast Notifications for Critical Real-Time Events (Looping every 30 minutes)
     let t1: NodeJS.Timeout, t2: NodeJS.Timeout, t3: NodeJS.Timeout, t4: NodeJS.Timeout;
@@ -98,6 +100,7 @@ export default function TacticalCommandCenter() {
   const isEmergency = severity === "danger" || severity === "warning"
 
   return (
+    <AuthGuard requiredRole="responder">
     <main className="relative h-screen w-screen overflow-hidden bg-slate-950 text-slate-50 font-sans select-none">
       
       {/* BASE LAYER: FULLSCREEN TACTICAL MAP */}
@@ -262,13 +265,13 @@ export default function TacticalCommandCenter() {
                      </button>
                    </div>
                    <div className="p-1 border-t border-white/5">
-                     <button 
-                       onClick={() => window.location.href = '/login'}
-                       className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors"
-                     >
-                       <LogOut className="size-3.5" />
-                       Sign Out
-                     </button>
+                      <button 
+                        onClick={() => { clearSession(); window.location.replace('/login'); }}
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 rounded-lg flex items-center gap-2 transition-colors"
+                      >
+                        <LogOut className="size-3.5" />
+                        Sign Out
+                      </button>
                    </div>
                  </div>
                </>
@@ -368,6 +371,7 @@ export default function TacticalCommandCenter() {
       </footer>
 
     </main>
+    </AuthGuard>
   )
 }
 
