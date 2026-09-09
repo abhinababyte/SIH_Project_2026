@@ -281,9 +281,9 @@ export default function TacticalCommandCenter() {
               <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-slate-300">
                 <span className="hidden md:inline">Uplink: </span>
                 {isConnected ? (
-                  <span className="text-emerald-400 font-bold hidden xs:inline">SECURE</span>
+                  <span className="text-emerald-400 font-bold xs:inline">SECURE</span>
                 ) : (
-                  <span className="text-rose-500 font-bold animate-pulse hidden xs:inline">
+                  <span className="text-rose-500 font-bold animate-pulse xs:inline">
                     OFFLINE
                   </span>
                 )}
