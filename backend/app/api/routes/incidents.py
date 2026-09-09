@@ -18,17 +18,19 @@ def get_incidents(db: Session = Depends(get_db)):
 async def escalate_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
     db_incident = incident_service.create_incident(db, incident)
 
-    await manager.broadcast({
-        "event": "INCIDENT_ESCALATED",
-        "incident": {
-            "id": db_incident.id,
-            "title": db_incident.title,
-            "location": db_incident.location,
-            "priority": db_incident.priority,
-            "status": db_incident.status,
-            "timestamp": str(db_incident.timestamp),
-        },
-    })
+    await manager.broadcast(
+        {
+            "event": "INCIDENT_ESCALATED",
+            "incident": {
+                "id": db_incident.id,
+                "title": db_incident.title,
+                "location": db_incident.location,
+                "priority": db_incident.priority,
+                "status": db_incident.status,
+                "timestamp": str(db_incident.timestamp),
+            },
+        }
+    )
     return db_incident
 
 
@@ -38,10 +40,12 @@ async def acknowledge_incident(incident_id: str, db: Session = Depends(get_db)):
     if not db_incident:
         raise HTTPException(status_code=404, detail="Incident not found")
 
-    await manager.broadcast({
-        "event": "INCIDENT_ACKNOWLEDGED",
-        "incident_id": incident_id,
-    })
+    await manager.broadcast(
+        {
+            "event": "INCIDENT_ACKNOWLEDGED",
+            "incident_id": incident_id,
+        }
+    )
     return db_incident
 
 
@@ -51,10 +55,12 @@ async def start_evacuation(incident_id: str, db: Session = Depends(get_db)):
     if not db_incident:
         raise HTTPException(status_code=404, detail="Incident not found")
 
-    await manager.broadcast({
-        "event": "INCIDENT_EVACUATION_STARTED",
-        "incident_id": incident_id,
-    })
+    await manager.broadcast(
+        {
+            "event": "INCIDENT_EVACUATION_STARTED",
+            "incident_id": incident_id,
+        }
+    )
     return db_incident
 
 
@@ -64,8 +70,10 @@ async def complete_incident(incident_id: str, db: Session = Depends(get_db)):
     if not db_incident:
         raise HTTPException(status_code=404, detail="Incident not found")
 
-    await manager.broadcast({
-        "event": "INCIDENT_COMPLETED",
-        "incident_id": incident_id,
-    })
+    await manager.broadcast(
+        {
+            "event": "INCIDENT_COMPLETED",
+            "incident_id": incident_id,
+        }
+    )
     return db_incident

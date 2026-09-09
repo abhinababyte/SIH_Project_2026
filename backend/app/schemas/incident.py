@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -16,7 +15,7 @@ class IncidentResponse(BaseModel):
     location: str
     priority: str
     status: str
-    reported_by: Optional[str] = None
+    reported_by: str | None = None
     timestamp: datetime
 
     class Config:

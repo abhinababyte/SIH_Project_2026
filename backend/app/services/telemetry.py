@@ -5,7 +5,9 @@ from app.models.telemetry import TelemetryLog
 from app.schemas.telemetry import TelemetryData
 
 
-def _save_telemetry_sync(db: Session, data: TelemetryData, risk_score: float) -> TelemetryLog:
+def _save_telemetry_sync(
+    db: Session, data: TelemetryData, risk_score: float
+) -> TelemetryLog:
     """Encapsulates blocking SQLAlchemy calls for threadpool execution."""
     telemetry = TelemetryLog(
         sensor_id=data.sensor_id,
@@ -24,5 +26,7 @@ def _save_telemetry_sync(db: Session, data: TelemetryData, risk_score: float) ->
         raise
 
 
-async def save_telemetry(db: Session, data: TelemetryData, risk_score: float) -> TelemetryLog:
+async def save_telemetry(
+    db: Session, data: TelemetryData, risk_score: float
+) -> TelemetryLog:
     return await run_in_threadpool(_save_telemetry_sync, db, data, risk_score)

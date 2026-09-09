@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -7,17 +6,17 @@ from pydantic import BaseModel
 class ReportCreate(BaseModel):
     report_type: str
     description: str
-    location: Optional[str] = None
-    reported_by: Optional[str] = None
+    location: str | None = None
+    reported_by: str | None = None
 
 
 class ReportResponse(BaseModel):
     id: str
     report_type: str
     description: str
-    location: Optional[str] = None
+    location: str | None = None
     status: str
-    reported_by: Optional[str] = None
+    reported_by: str | None = None
     timestamp: datetime
 
     class Config:
