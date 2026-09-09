@@ -1,6 +1,15 @@
 from fastapi import APIRouter
 
-from app.api.routes import auth, bhashini, escalations, incidents, prediction, reports, telemetry, websocket
+from app.api.routes import (
+    auth,
+    bhashini,
+    escalations,
+    incidents,
+    prediction,
+    reports,
+    telemetry,
+    websocket,
+)
 
 api_router = APIRouter()
 api_router.include_router(auth.router)

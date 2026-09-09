@@ -5,4 +5,4 @@ from app.models.report import Report
 from app.models.telemetry import TelemetryLog
 from app.models.user import User
 
-__all__ = ["Base", "User", "TelemetryLog", "Incident", "Report", "Escalation"]
+__all__ = ["Base", "Escalation", "Incident", "Report", "TelemetryLog", "User"]

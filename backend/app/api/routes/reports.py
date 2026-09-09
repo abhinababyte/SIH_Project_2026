@@ -18,16 +18,18 @@ def get_reports(db: Session = Depends(get_db)):
 async def create_report(report: ReportCreate, db: Session = Depends(get_db)):
     db_report = report_service.create_report(db, report)
 
-    await manager.broadcast({
-        "event": "REPORT_CREATED",
-        "report": {
-            "id": db_report.id,
-            "report_type": db_report.report_type,
-            "description": db_report.description,
-            "location": db_report.location,
-            "status": db_report.status,
-            "reported_by": db_report.reported_by,
-            "timestamp": str(db_report.timestamp),
-        },
-    })
+    await manager.broadcast(
+        {
+            "event": "REPORT_CREATED",
+            "report": {
+                "id": db_report.id,
+                "report_type": db_report.report_type,
+                "description": db_report.description,
+                "location": db_report.location,
+                "status": db_report.status,
+                "reported_by": db_report.reported_by,
+                "timestamp": str(db_report.timestamp),
+            },
+        }
+    )
     return db_report

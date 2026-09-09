@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app import models
 from app.api.routes import api_router
 from app.core.config import CORS_ORIGIN_REGEX, CORS_ORIGINS
 from app.core.database import Base, engine
